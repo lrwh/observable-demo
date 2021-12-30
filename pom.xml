@@ -42,9 +42,9 @@
     </dependencyManagement>
 
     <modules>
-		<module>jaeger-demo</module>
-        <module>otel</module>
-        <module>otel-client</module>
+		<module>springboot-opentracing-jaeger</module>
+        <module>springboot-opentelemetry-jaeger-server</module>
+        <module>springboot-opentelemetry-jaeger-client</module>
     </modules>
     <packaging>pom</packaging>
 

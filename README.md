@@ -2,12 +2,12 @@
 
 demo 介绍
 
-jaeger-demo ：springboot+ jaeger + opentrace
+springboot-opentracing-jaeger ：springboot+ jaeger + opentrace
 
 opentelemetry-javaagent :  opentelemetry-javaagent.jar
 
-otel : springboot + opentelemetry + jaegerExporter
+springboot-opentelemetry-jaeger-server : springboot + opentelemetry + jaegerExporter
 
-otel-client : springboot + opentelemetry + jaegerExporter
+springboot-opentelemetry-jaeger-client : springboot + opentelemetry + jaegerExporter
 
 
