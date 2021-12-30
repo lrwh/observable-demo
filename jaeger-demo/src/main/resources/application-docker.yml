@@ -1,0 +1,24 @@
+server:
+  port: 8080
+api:
+  url: http://localhost:${server.port}
+spring:
+  application:
+    name: 付账单
+  mvc:
+    view:
+      prefix: /
+      suffix: .html
+opentracing:
+  jaeger:
+    udp-sender:
+      host: jaeger
+      port: 6831 # 推送至jaeger-ui使用6831，datakit用6832
+      ui-port: 16686
+    probabilistic-sampler:
+      sampling-rate: 1
+    enabled: true
+    log-spans: false
+    service-name: ${spring.application.name}
+extra:
+  host: EXTRA_HOST

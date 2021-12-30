@@ -1,0 +1,18 @@
+server:
+  port: 8080
+api:
+  url: http://localhost:${server.port}
+spring:
+  application:
+    name: 付款单
+  mvc:
+    view:
+      prefix: /
+      suffix: .html
+extra:
+  host: EXTRA_HOST
+trace:
+  exporter:
+    host: localhost
+    port: 14250
+    uiPort: 16686

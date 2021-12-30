@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jaeger demo</title>
+</head>
+<script>
+    function getResource() {
+        var tag = document.getElementById("tag").value;
+        console.log(tag);
+        //href="/resource?tag=getResource"
+        window.location.href="/gateway?tag="+tag;
+    }
+</script>
+<body>
+    <p>this is jaeger demo </p>
+    tag: <input type="text" placeholder="请输入tag" name="tag" id="tag" value="" /><br />
+    <p><a href="javascript:getResource()" >获取资源 - 正常测试</a> </p>
+    <a href="/resource?tag=error">获取资源 - 异常测试</a> <br />
+
+
+</body>
+</html>

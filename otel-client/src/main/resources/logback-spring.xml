@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+    <!-- 部分参数需要来源于properties文件 -->
+    <springProperty scope="context" name="logName" source="spring.application.name" defaultValue="localhost.log"/>
+    <!-- 配置后可以动态修改日志级别-->
+    <jmxConfigurator />
+    <property name="log.pattern" value="%d{HH:mm:ss} [%thread] %-5level %logger{10} [traceId=%X{trace_id} spanId=%X{span_id} userId=%X{user-id}] %msg%n" />
+
+    <!-- %m输出的信息,%p日志级别,%t线程名,%d日期,%c类的全名,,,, -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 只打印error级别的内容 -->
+    <logger name="com.netflix" level="ERROR" />
+    <logger name="net.sf.json" level="ERROR" />
+    <logger name="org.springframework" level="ERROR" />
+    <logger name="springfox" level="ERROR" />
+
+    <!-- sql 打印 配置-->
+    <logger name="com.github.pagehelper.mapper" level="DEBUG" />
+    <logger name="org.apache.ibatis" level="DEBUG" />
+
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
