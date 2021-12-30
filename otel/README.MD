@@ -117,11 +117,11 @@ api.url: 当前app的访问地址
 
 
 
-![](..\images\2021-12-30-16-49-45-image.png)
+![](../images/2021-12-30-16-49-45-image.png)
 
 jaeger-ui效果
 
-![](..\images\2021-12-30-16-50-10-image.png)
+![](../images/2021-12-30-16-50-10-image.png)
 
 
 
