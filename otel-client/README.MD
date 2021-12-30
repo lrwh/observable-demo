@@ -49,7 +49,11 @@ maven pom.xml
         </dependency>
 ```
 
+当前服务为client，可以结合otel一起使用
 
+server port: 8080
+
+client port: 8081
 
 #### 错误姿势
 
@@ -113,11 +117,11 @@ api.url: 当前app的访问地址
 
 
 
-![](C:\Users\lenovo\AppData\Roaming\marktext\images\2021-12-30-16-49-45-image.png)
+![](..\images\2021-12-30-16-49-45-image.png)
 
+jaeger-ui效果
 
-
-![](C:\Users\lenovo\AppData\Roaming\marktext\images\2021-12-30-16-50-10-image.png)
+![](..\images\2021-12-30-16-50-10-image.png)
 
 
 
