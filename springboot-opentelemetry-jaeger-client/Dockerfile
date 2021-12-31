@@ -5,11 +5,14 @@ VOLUME /tmp
 
 WORKDIR /data
 RUN mkdir logs
-ADD ../target/otel.jar otel.jar
+# 这个目录自行修改
+ADD ../target/springboot-opentelemetry-jaeger-server.jar app.jar
 ADD ../../opentelemetry-javaagent/opentelemetry-javaagent.jar opentelemetry-javaagent.jar
 # 修改时区
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # 解决中文乱码
 ENV LANG en_US.UTF-8
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","otel.jar","--spring.profiles.active=docker"]
+
+CMD java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar app.jar --spring.profiles.active=docker --client=false
+#ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar","--spring.profiles.active=docker"]
