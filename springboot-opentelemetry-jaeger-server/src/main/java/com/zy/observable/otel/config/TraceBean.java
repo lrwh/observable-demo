@@ -14,6 +14,7 @@ import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.semconv.resource.attributes.ResourceAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,12 +29,14 @@ import java.util.concurrent.TimeUnit;
 public class TraceBean {
     @Autowired
     private TraceConfig config;
+    @Value("${spring.application.name}")
+    private String appName;
 
     @Bean
     @ConditionalOnBean(TraceConfig.class)
     public OpenTelemetry openTelemetry() {
         SpanProcessor spanProcessor = getJaegerGrpcSpanProcessor();
-        Resource serviceNameResource = Resource.create(Attributes.of(ResourceAttributes.SERVICE_NAME, "otelService"));
+        Resource serviceNameResource = Resource.create(Attributes.of(ResourceAttributes.SERVICE_NAME, appName));
 
         // Set to process the spans by the Zipkin Exporter
         SdkTracerProvider tracerProvider =

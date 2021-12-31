@@ -1,9 +1,3 @@
-
-
-
-
-
-
 maven pom.xml
 
 ```java
@@ -70,11 +64,7 @@ java -javaagent:D:\\opentelemetry-javaagent\\opentelemetry-javaagent.jar \
 
 > [otel.javaagent 2021-12-31 00:29:47:519 +0800] [OkHttp http://localhost:4317/...] ERROR io.opentelemetry.exporter.otlp.internal.grpc.OkHttpGrpcExporter - Failed to export spans. The request could not be executed. Full error message: Failed to connect to localhost/0:0:0:0:0:0:0:1:4317
 
-
-
 从异常来看，4317端口指的就是otlp exporter，说明这样的启动配置不对。
-
-
 
 #### 正确姿势：
 
@@ -107,21 +97,39 @@ java -javaagent:opentelemetry-javaagent.jar \
 -jar otel.jar --trace.exporter.host=192.168.91.11 --api.url=http://192.168.91.11:8080
 ```
 
-
-
 trace.exporter.host: exporter的外网地址，如果是本机，就用localhost
 
 api.url: 当前app的访问地址
 
 效果图：
 
-
-
 ![](../images/2021-12-30-16-49-45-image.png)
 
 jaeger-ui效果
 
 ![](../images/2021-12-30-16-50-10-image.png)
+
+#### Baggage 用法
+
+Baggage 可以在整个链路传播，适用于全局埋点，比如用户id埋点、用户名埋点，方便我们对某一个用户追踪。
+
+gateway方法 set Baggage
+
+```java
+// Baggage 用法,此处set
+        Baggage.current().toBuilder().put("app.username", "gateway").build().makeCurrent();
+        logger.info("gateway set baggage[app.username] value: gateway");
+```
+
+
+
+resource 方法 get Baggage
+
+```java
+ // Baggage 用法,此get
+        String baggage = Baggage.current().getEntryValue("app.username");
+        logger.info("resource get baggage[app.username] value: {}", baggage);
+```
 
 
 

@@ -21,14 +21,14 @@ public class BaseController {
     @Autowired
     public OpenTelemetry openTelemetry;
 
-    @Value("${trace.exporter.host}")
-    public String exporterHost;
+    @Value("${extra.host}")
+    public String extraHost;
     @Value("${trace.exporter.uiPort}")
     public String exporterUiPort;
     @Value("${server.port}")
     public String serverPort;
 
     public String buildTraceUrl(String traceId){
-        return "<a href='http://"+exporterHost+":"+serverPort+"/getTrace?traceId="+traceId+"'>"+traceId+"</a>";
+        return "<a href='http://"+extraHost+":"+serverPort+"/getTrace?traceId="+traceId+"'>"+traceId+"</a>";
     }
 }

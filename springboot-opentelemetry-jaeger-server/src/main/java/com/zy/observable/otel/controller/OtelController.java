@@ -18,9 +18,10 @@ import io.opentelemetry.semconv.trace.attributes.SemanticAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-import org.springframework.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.InputStream;
@@ -36,6 +37,9 @@ import java.util.Optional;
 public class OtelController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(OtelController.class);
+
+    @Value("${client:false}")
+    private Boolean client;
 
     /**
      * 自定义span
@@ -95,6 +99,9 @@ public class OtelController extends BaseController {
                 AttributeKey.stringKey("key"), "value",
                 AttributeKey.longKey("result"), 10L);
 
+        // Baggage 用法,此处set
+        Baggage.current().toBuilder().put("app.username", "gateway").build().makeCurrent();
+        logger.info("gateway set baggage[app.username] value: gateway");
         span.addEvent("End Computation", eventAttributes);
         doSomeWorkNewSpan();
         logger.info("this is tag");
@@ -102,7 +109,9 @@ public class OtelController extends BaseController {
 
         httpTemplate.getForEntity(apiUrl + "/resource", String.class).getBody();
         httpTemplate.getForEntity(apiUrl + "/auth", String.class).getBody();
-        httpTemplate.getForEntity(  "http://localhost:8081/client", String.class).getBody();
+        if (client) {
+            httpTemplate.getForEntity("http://"+extraHost+":8081/client", String.class).getBody();
+        }
         return httpTemplate.getForEntity(apiUrl + "/billing?tag=" + tag, String.class).getBody();
     }
 
@@ -111,7 +120,9 @@ public class OtelController extends BaseController {
     public String resource() {
         Span.current().updateName("资源服务");
         Span.current().setAttribute("func", "resource");
-        System.out.println(Baggage.current().getEntryValue("Baggage1"));
+        // Baggage 用法,此get
+        String baggage = Baggage.current().getEntryValue("app.username");
+        logger.info("resource get baggage[app.username] value: {}", baggage);
         return "this is resource";
     }
 
@@ -139,7 +150,7 @@ public class OtelController extends BaseController {
 
     @GetMapping("/getTrace")
     public String getTrace(String traceId) {
-        return "redirect:http://" + exporterHost + ":" + exporterUiPort + "/trace/" + traceId;
+        return "redirect:http://" + extraHost + ":" + exporterUiPort + "/trace/" + traceId;
     }
 
 
@@ -190,9 +201,9 @@ public class OtelController extends BaseController {
                         carrier.setRequestProperty(key, value);
                     }
                 };
-        Span outGoing = tracer.spanBuilder("/resource").setSpanKind(SpanKind.CLIENT).startSpan();
+        Span outGoing = tracer.spanBuilder("/sonContext").setSpanKind(SpanKind.CLIENT).startSpan();
         try (Scope scope = outGoing.makeCurrent()) {
-            URL url = new URL("http://127.0.0.1:8080/resource");
+            URL url = new URL("http://127.0.0.1:8080/sonContext");
             // Use the Semantic Conventions.
             // (Note that to set these, Span does not *need* to be the current instance in Context or Scope.)
             outGoing.setAttribute(SemanticAttributes.HTTP_METHOD, "GET");
@@ -201,8 +212,7 @@ public class OtelController extends BaseController {
             outGoing.setAttribute("username", "joy");
             HttpURLConnection transportLayer = (HttpURLConnection) url.openConnection();
             // Inject the request with the *current*  Context, which contains our current Span.
-            Baggage baggage = Baggage.builder().put("Baggage1", "Baggage2").build();
-            baggage.storeInContext(Context.current());
+            setter.set(transportLayer, "contextName", "MyContext");
             openTelemetry.getPropagators().getTextMapPropagator().inject(Context.current(), transportLayer, setter);
             // Make outgoing call
             InputStream is = transportLayer.getInputStream();
@@ -215,13 +225,9 @@ public class OtelController extends BaseController {
         return "context";
     }
 
-
-    ;
-
-    //
-//    }
     public void handle(HttpExchange httpExchange) {
         //        TextMapGetter<HttpExchange> getter =
+
         TextMapGetter<HttpExchange> getter = new TextMapGetter<HttpExchange>() {
             @Override
             public String get(HttpExchange carrier, String key) {
@@ -230,6 +236,7 @@ public class OtelController extends BaseController {
                 }
                 return null;
             }
+
             @Override
             public Iterable<String> keys(HttpExchange carrier) {
                 return carrier.getRequestHeaders().keySet();
@@ -254,5 +261,21 @@ public class OtelController extends BaseController {
                 serverSpan.end();
             }
         }
+    }
+
+    @RequestMapping("/getClient")
+    @ResponseBody
+    public String getClient() {
+        return result();
+    }
+
+    @RequestMapping("/setClient")
+    @ResponseBody
+    public String setClient(Boolean c) {
+        client = c;
+        return result();
+    }
+    private String result(){
+        return client ? "【已开启】客户端请求" : "【已关闭】客户端请求";
     }
 }

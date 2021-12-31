@@ -10,9 +10,10 @@ spring:
       prefix: /
       suffix: .html
 extra:
-  host: EXTRA_HOST
+  host: localhost
 trace:
   exporter:
     host: localhost
     port: 14250
     uiPort: 16686
+client: false
