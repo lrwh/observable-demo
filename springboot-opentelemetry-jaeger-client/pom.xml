@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.zy.observable</groupId>
-    <artifactId>springboot-opentelemetry-jaeger-server</artifactId>
+    <artifactId>springboot-opentelemetry-jaeger-client</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>springboot-opentelemetry-jaeger-server</name>
+    <name>springboot-opentelemetry-jaeger-client</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>1.8</java.version>
