@@ -1,9 +1,13 @@
 version: '3.3'
 
 services:
-    observble-server:
-        build: server
-        container_name: observble_server
+    springboot_opentelemetry_jaeger_server:
+        image: springboot_opentelemetry_jaeger_server:v1
+        build:
+            # 将dockerfile放到当前目录，并重命名为DockerfileServer
+            dockerfile: DockerfileServer
+            context: .
+        container_name: springboot_opentelemetry_jaeger_server
         ports:
             - 8080:8080
         environment:
@@ -15,9 +19,13 @@ services:
             - JAVA_OPTS=-javaagent:opentelemetry-javaagent.jar -Dotel.resource.attributes=service.name=observble_server -Dotel.javaagent.debug=false -Dotel.metrics.exporter=none
         depends_on:
             - jaeger
-    observble-client:
-        build: client
-        container_name: observble_client
+    springboot_opentelemetry_jaeger_client:
+        image: springboot_opentelemetry_jaeger_client:v1
+        build:
+            # 将dockerfile放到当前目录，并重命名为DockerfileClient
+            dockerfile: DockerfileClient
+            context: .
+        container_name: springboot_opentelemetry_jaeger_client
         ports:
             - 8081:8081
         environment:
