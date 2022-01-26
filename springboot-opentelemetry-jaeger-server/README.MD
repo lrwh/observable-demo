@@ -121,8 +121,6 @@ gateway方法 set Baggage
         logger.info("gateway set baggage[app.username] value: gateway");
 ```
 
-
-
 resource 方法 get Baggage
 
 ```java
@@ -130,7 +128,3 @@ resource 方法 get Baggage
         String baggage = Baggage.current().getEntryValue("app.username");
         logger.info("resource get baggage[app.username] value: {}", baggage);
 ```
-
-
-
-

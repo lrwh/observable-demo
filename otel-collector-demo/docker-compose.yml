@@ -1,0 +1,73 @@
+version: '3.3'
+
+services:
+    springboot_opentelemetry_jaeger_server:
+        image: springboot_opentelemetry_jaeger_server:v1
+        build:
+            # 将dockerfile放到当前目录，并重命名为DockerfileServer
+            dockerfile: DockerfileServer
+            context: .
+        container_name: springboot_opentelemetry_jaeger_server
+        ports:
+            - 8080:8080
+        environment:
+            # 外网ip，用于访问jaeger UI
+            - EXTRA_HOST=192.168.91.11
+            - OTEL_TRACES_EXPORTER=otlp
+            - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+            - JAVA_OPTS=-javaagent:opentelemetry-javaagent.jar -Dotel.resource.attributes=service.name=springboot_opentelemetry_jaeger_server -Dotel.javaagent.debug=false -Dotel.metrics.exporter=prometheus
+        depends_on:
+            - otel-collector
+    springboot_opentelemetry_jaeger_client:
+        image: springboot_opentelemetry_jaeger_client:v1
+        build:
+            # 将dockerfile放到当前目录，并重命名为DockerfileClient
+            dockerfile: DockerfileClient
+            context: .
+        container_name: springboot_opentelemetry_jaeger_client
+        ports:
+            - 8081:8081
+        environment:
+            # 外网ip，用于访问jaeger UI
+            - EXTRA_HOST=192.168.91.11
+            - OTEL_TRACES_EXPORTER=otlp
+            - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+            - JAVA_OPTS=-javaagent:opentelemetry-javaagent.jar -Dotel.resource.attributes=service.name=springboot_opentelemetry_jaeger_client -Dotel.javaagent.debug=false -Dotel.metrics.exporter=prometheus
+        depends_on:
+            - otel-collector
+    jaeger:
+        image: jaegertracing/all-in-one:1.29
+        container_name: otel_collector_jaeger
+        ports:
+            - 16686:16686
+            - 14250
+            - 14268
+    zipkin:
+        image: openzipkin/zipkin:latest
+        container_name: otel_collector_zipkin
+        ports:
+            - 9411:9411
+    # Collector
+    otel-collector:
+        image: otel/opentelemetry-collector-contrib-dev:latest
+        #image: otel/otelcol:v0.36.0-amd64
+        command: ["--config=/etc/otel-collector-config.yaml"]
+        volumes:
+            - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+        ports:
+            - "1888:1888"   # pprof extension
+            - "8888:8888"   # Prometheus metrics exposed by the collector
+            - "8889:8889"   # Prometheus exporter metrics
+            - "13133:13133" # health_check extension
+            - "4317"        # OTLP gRPC receiver
+            - "55670:55679" # zpages extension
+        depends_on:
+            - jaeger
+            - zipkin
+    prometheus:
+        container_name: prometheus
+        image: prom/prometheus:latest
+        volumes:
+            - ./prometheus.yaml:/etc/prometheus/prometheus.yml
+        ports:
+            - "9090:9090"
