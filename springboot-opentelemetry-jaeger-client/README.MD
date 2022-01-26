@@ -49,11 +49,11 @@ maven pom.xml
         </dependency>
 ```
 
-当前服务为client，可以结合otel一起使用
+当前服务为springboot-opentelemetry-jaeger-server，可以结合springboot-opentelemetry-jaeger-client一起使用
 
-server port: 8080
+springboot-opentelemetry-jaeger-server port: 8080
 
-client port: 8081
+springboot-opentelemetry-jaeger-client port: 8081
 
 #### 错误姿势
 
@@ -65,7 +65,7 @@ java -javaagent:D:\\opentelemetry-javaagent\\opentelemetry-javaagent.jar \
 -Dotel.exporter.jaeger.endpoint=http://localhost:14250 \
 -Dotel.resource.attributes=service.name=demo \
 -Dotel.javaagent.debug=false \
--Dotel.metrics.exporter=none -jar otel.jar --trace.exporter.host=localhost --api.url=http://localhost:8080 
+-Dotel.metrics.exporter=none -jar springboot-opentelemetry-jaeger-client.jar --trace.exporter.host=localhost --api.url=http://localhost:8080 
 ```
 
 > [otel.javaagent 2021-12-31 00:29:47:519 +0800] [OkHttp http://localhost:4317/...] ERROR io.opentelemetry.exporter.otlp.internal.grpc.OkHttpGrpcExporter - Failed to export spans. The request could not be executed. Full error message: Failed to connect to localhost/0:0:0:0:0:0:0:1:4317
@@ -91,7 +91,7 @@ OTEL_EXPORTER_JAEGER_TIMEOUT=10000
 ```shell
 nohup java -javaagent:opentelemetry-javaagent.jar \
     -Dotel.metrics.exporter=none \
-    -jar otel.jar --trace.exporter.host=localhost --api.url=http://localhost:8080 &
+    -jar springboot-opentelemetry-jaeger-client.jar --trace.exporter.host=localhost --api.url=http://localhost:8080 &
 ```
 
 或者
@@ -104,7 +104,7 @@ java -javaagent:opentelemetry-javaagent.jar \
 -Dotel.resource.attributes=service.name=demo \
 -Dotel.javaagent.debug=false \
 -Dotel.metrics.exporter=none \
--jar otel.jar --trace.exporter.host=192.168.91.11 --api.url=http://192.168.91.11:8080
+-jar springboot-opentelemetry-jaeger-client.jar --trace.exporter.host=192.168.91.11 --api.url=http://192.168.91.11:8080
 ```
 
 
