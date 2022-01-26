@@ -13,7 +13,7 @@
 
 ## 架构
 
-![](..\images\2022-01-11-11-34-25-image.png)
+![](../images/2022-01-11-11-34-25-image.png)
 
 ### 架构说明
 
@@ -63,14 +63,14 @@ exporters:
 
 ## 请求server，点击‘获取资源 - 正常测试’，产生一个traceId.
 
-![](..\images\2022-01-26-14-27-23-image.png)
+![](../images/2022-01-26-14-27-23-image.png)
 
-![](..\images\2022-01-11-11-44-56-image.png)
+![](../images/2022-01-11-11-44-56-image.png)
 
 ## 将traceId复制到zipkin查找链路信息
 
-![](..\images\2022-01-11-11-44-44-image.png)
+![](../images/2022-01-11-11-44-44-image.png)
 
 ## 将traceId复制到jaeger查找链路信息
 
-![](..\images\2022-01-11-11-44-24-image.png)
+![](../images/2022-01-11-11-44-24-image.png)
