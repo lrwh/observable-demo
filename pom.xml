@@ -45,6 +45,8 @@
 		<module>springboot-opentracing-jaeger</module>
         <module>springboot-opentelemetry-jaeger-server</module>
         <module>springboot-opentelemetry-jaeger-client</module>
+        <module>springboot-opentelemetry-otlp-server</module>
+        <module>springboot-opentelemetry-otlp-client</module>
     </modules>
     <packaging>pom</packaging>
 
