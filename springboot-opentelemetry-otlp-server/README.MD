@@ -46,30 +46,14 @@ maven pom.xml
 配置环境变量
 
 ```shell
-OTEL_TRACES_EXPORTER=jaeger
-OTEL_EXPORTER_JAEGER_ENDPOINT=http://localhost:14250
-OTEL_EXPORTER_JAEGER_TIMEOUT=10000
-```
-
-启动脚本
-
-```shell
-nohup java -javaagent:opentelemetry-javaagent.jar \
-    -Dotel.metrics.exporter=none \
-    -jar springboot-opentelemetry-jaeger-server.jar --trace.exporter.host=localhost --api.url=http://localhost:8080 &
-```
-
-或者
-
-```shell
-OTEL_TRACES_EXPORTER=jaeger \
+OTEL_TRACES_EXPORTER=otlp \
 OTEL_EXPORTER_OTLP_ENDPOINT=http://192.168.91.11:4317 \
 OTEL_EXPORTER_OTLP_TIMEOUT=10000 \
 java -javaagent:opentelemetry-javaagent.jar \
 -Dotel.resource.attributes=service.name=demo \
 -Dotel.javaagent.debug=false \
 -Dotel.metrics.exporter=none \
--jar springboot-opentelemetry-otlp-server.jar --trace.exporter.host=192.168.91.11 --trace.exporter.port=4317
+-jar springboot-opentelemetry-otlp-server.jar --trace.exporter.host=192.168.91.11 --trace.exporter.port=4317 --client=true
 ```
 
 #### 方式二：
@@ -80,7 +64,7 @@ java -javaagent:../opentelemetry-javaagent/opentelemetry-javaagent.jar \
 -Dotel.exporter.otlp.endpoint=http://192.168.91.11:4317 \
 -Dotel.resource.attributes=service.name=demo \
 -Dotel.metrics.exporter=none \
--jar springboot-opentelemetry-otlp-server.jar --trace.exporter.host=192.168.91.11 --trace.exporter.port=4317
+-jar springboot-opentelemetry-otlp-server.jar --trace.exporter.host=192.168.91.11 --trace.exporter.port=4317 --client=true
 ```
 
 # 自定义tag需要用到
