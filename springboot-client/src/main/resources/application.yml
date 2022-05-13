@@ -1,0 +1,17 @@
+server:
+  port: 8081
+api:
+  url: http://localhost:${server.port}
+spring:
+  application:
+    name: client
+  mvc:
+    view:
+      prefix: /
+      suffix: .html
+extra:
+  host: EXTRA_HOST
+trace:
+  exporter:
+    host: 192.168.91.11
+    port: 4317
