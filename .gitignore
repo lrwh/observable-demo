@@ -32,5 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
-node_modules
-logs
+node_modules/
+opentelemetry-js/node_modules/
+logs/
