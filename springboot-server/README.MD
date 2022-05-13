@@ -53,11 +53,11 @@ curl http://localhost:8080/getClient
 
 #### server-client
 
-https://github.com/lrwh/observable-demo/springboot-client/README.MD
+https://github.com/lrwh/observable-demo/blob/main/springboot-client
 
 #### 前端链路
 
-https://github.com/lrwh/observable-demo/opentelemetry/README.md
+https://github.com/lrwh/observable-demo/blob/main/opentelemetry-js
 
 效果图：
 

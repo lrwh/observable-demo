@@ -39,17 +39,7 @@ java -javaagent:../opentelemetry-javaagent/opentelemetry-javaagent.jar \
 
 #### 前端链路
 
-https://github.com/lrwh/observable-demo/opentelemetry/README.md
+https://github.com/lrwh/observable-demo/blob/main/opentelemetry-js
 
-
-
-# 自定义tag需要用到
-
-trace.exporter.host: exporter数据接收主机，如果是本机，就用localhost
-trace.exporter.port: exporter数据接收端口
-
-效果图：
-
-![](../images/2022-03-11-11-28-16-image.png)
 
 
