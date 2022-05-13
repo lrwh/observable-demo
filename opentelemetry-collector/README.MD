@@ -8,12 +8,12 @@ image: otel/opentelemetry-collector:0.50.0
 
 ## 服务列表
 
-| 服务名称                                   | 端口        | 描述                       | 请求地址            |
-| -------------------------------------- | --------- | ------------------------ | --------------- |
-| jaeger                                 |           | 端口查看 docker-compose.yml  | http://ip:16686 |
-| zipkin                                 | 9411:9411 | openzipkin/zipkin:latest | http://ip:9411  |
-| otel-collector                         |           | 端口查看 docker-compose.yml  |                 |
-| prometheus                             | 9090:9090 | prom/prometheus:latest   | http://ip:9090  |
+| 服务名称           | 端口        | 描述                       | 请求地址            |
+| -------------- | --------- | ------------------------ | --------------- |
+| jaeger         |           | 端口查看 docker-compose.yml  | http://ip:16686 |
+| zipkin         | 9411:9411 | openzipkin/zipkin:latest | http://ip:9411  |
+| otel-collector |           | 端口查看 docker-compose.yml  |                 |
+| prometheus     | 9090:9090 | prom/prometheus:latest   | http://ip:9090  |
 
 ## 架构
 
@@ -68,12 +68,15 @@ otel-collector 配置了四个exporter.
 如产生traceId：930da2560b8df3a931aa9e9a86e4ce84，在不同UI平台上效果如下：
 
 ## jaeger-ui
+
 ![jaeger-ui](../images/jaeger-ui.png)
 
 ## zipkin-ui
+
 ![zipkin-ui](../images/zipkin-ui.png)
 
-## 观测云
+## [观测云](https://www.guance.com/)
+
 ![guance-trace-list](../images/guance-trace-list.png)
 
 ![guance-trace-ui](../images/guance-trace-ui.png)
