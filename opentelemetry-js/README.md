@@ -103,7 +103,7 @@ API接口
 
 接口源码
 
-https://github.com/lrwh/observable-demo/springboot-server/README.MD
+https://github.com/lrwh/observable-demo/blob/main/springboot-server/README.MD
 
 访问url
 
