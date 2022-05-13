@@ -48,6 +48,8 @@
         <module>springboot-opentelemetry-otlp-server</module>
         <module>springboot-opentelemetry-otlp-client</module>
         <module>springboot-ddtrace-server</module>
+        <module>springboot-server</module>
+        <module>springboot-client</module>
     </modules>
     <packaging>pom</packaging>
 
