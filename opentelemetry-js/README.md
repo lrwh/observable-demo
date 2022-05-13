@@ -47,7 +47,7 @@ npm start
 
 ![Screenshot of the running example](images/xml-http-request.png)
 
-ZipkinExporter
+### ZipkinExporter
 
 将数据推送到 zipkin
 
@@ -61,7 +61,7 @@ const zipkinExporter = new ZipkinExporter(zipkinOptions);
 providerWithZone.addSpanProcessor(new SimpleSpanProcessor(zipkinExporter));
 ```
 
-OTLPTraceExporter
+### OTLPTraceExporter
 
 将数据推送到 otlp
 
@@ -75,9 +75,9 @@ const otelExporter = new OTLPTraceExporter({
 
 url 为 otlp grpc。
 
-WebTracerProvider
+### WebTracerProvider
 
-默认配置
+#### 默认配置
 
 ```js
 const providerWithZone = new WebTracerProvider();
@@ -86,7 +86,7 @@ const providerWithZone = new WebTracerProvider();
 默认配置，前端上报trace数据会发生unknown_service.
 ![unknown_service](images/unknown_service.png)
 
-配置service_name
+#### 配置service_name
 
 ```js
 const providerWithZone = new WebTracerProvider({
@@ -99,9 +99,9 @@ const providerWithZone = new WebTracerProvider({
 
 ![jaeger-ui](images/jaeger-ui.png)
 
-API接口
+### API接口
 
-接口源码
+#### 接口源码
 
 https://github.com/lrwh/observable-demo/blob/main/springboot-server/README.MD
 
@@ -109,7 +109,7 @@ https://github.com/lrwh/observable-demo/blob/main/springboot-server/README.MD
 
 http://localhost:8080/gateway
 
-前后端链路打通
+#### 前后端链路关联
 
 前端产生traceId，通过header方式传递给后端API。
 
