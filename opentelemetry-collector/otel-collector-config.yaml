@@ -1,0 +1,47 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+
+exporters:
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    const_labels:
+      label1: value1
+  logging:
+
+  zipkin:
+    endpoint: "http://otel_collector_zipkin:9411/api/v2/spans"
+    format: proto
+
+  jaeger:
+    endpoint: otel_collector_jaeger:14250
+    tls:
+      insecure: true
+  otlp:
+    endpoint: "http://192.168.91.11:4319" # 将链路信息输出到观测云平台
+    tls:
+      insecure: true
+    compression: none # 不开启gzip
+
+processors:
+  batch:
+
+extensions:
+  health_check:
+  pprof:
+    endpoint: :1888
+  zpages:
+    endpoint: :55679
+
+service:
+  extensions: [pprof, zpages, health_check]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging, zipkin, jaeger,otlp]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging, prometheus]
