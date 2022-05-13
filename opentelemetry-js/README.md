@@ -73,7 +73,7 @@ const otelExporter = new OTLPTraceExporter({
 });
 ```
 
-url 为 otlp grpc。
+url 为 otlp http。
 
 ### WebTracerProvider
 
