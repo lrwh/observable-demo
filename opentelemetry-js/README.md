@@ -1,6 +1,6 @@
 # 概述
 
-这个例子展示了如何使用[@opentelemetry/sdk trace web](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/opentelemetry-sdk-trace-web)使用不同的插件和设置来检测浏览器中运行的JavaScript代码。
+这个例子展示了如何使用[@opentelemetry/sdk trace web](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/opentelemetry-sdk-trace-web)使用不同的插件和设置来检测浏览器中运行的JavaScript代码。同时也展示了如何与后端APM结合实现trace联动效果。
 
 ## 安装
 
