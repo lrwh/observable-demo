@@ -1,0 +1,20 @@
+server:
+  port: 8080
+api:
+  url: http://localhost:${server.port}
+spring:
+  application:
+    name: otlp-server
+  mvc:
+    view:
+      prefix: /
+      suffix: .html
+  main:
+    allow-bean-definition-overriding: true
+extra:
+  host: localhost
+trace:
+  exporter:
+    host: localhost
+    port: 14250
+client: false
