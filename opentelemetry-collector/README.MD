@@ -59,7 +59,7 @@ otel-collector 配置了四个exporter.
 
 2. 检查应用运行情况 docker-compose ps 
 
-3、启动 server （https://github.com/lrwh/observable-demo/blob/main/springboot-server）、client(可选 https://github.com/lrwh/observable-demo/blob/main/springboot-client)、front-app(https://github.com/lrwh/observable-demo/tree/main/opentelemetry-js)
+3、启动 server （https://github.com/lrwh/observable-demo/blob/main/springboot-server ）、client(可选 https://github.com/lrwh/observable-demo/blob/main/springboot-client )、front-app( https://github.com/lrwh/observable-demo/tree/main/opentelemetry-js )
 
 4、访问 http://<front-app-host>:<front-app-port>/xml-http-request，产生trace信息并调用接口。
 
