@@ -49,7 +49,11 @@ npm start
 
 ### ZipkinExporter
 
-将数据推送到 zipkin
+#### 安装 zipkin
+https://github.com/lrwh/observable-demo/blob/main/amp/zipkin
+
+
+#### 将数据推送到 zipkin
 
 ```js
 const zipkinOptions = {
@@ -61,9 +65,10 @@ const zipkinExporter = new ZipkinExporter(zipkinOptions);
 providerWithZone.addSpanProcessor(new SimpleSpanProcessor(zipkinExporter));
 ```
 
+
 ### OTLPTraceExporter
 
-将数据推送到 otlp
+#### 将数据推送到 otlp
 
 ```js
 const otelExporter = new OTLPTraceExporter({
@@ -74,6 +79,14 @@ const otelExporter = new OTLPTraceExporter({
 ```
 
 url 为 otlp http。
+
+#### 安装otel-collector
+
+`otlp` 协议需要通过 `opentelemetry-collector` 将数据转化后通过 `exporter` 到其他 APM 或者其他可观测平台进行UI展示.
+
+https://github.com/lrwh/observable-demo/blob/main/opentelemetry-collector
+
+
 
 ### WebTracerProvider
 
