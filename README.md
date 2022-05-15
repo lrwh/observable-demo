@@ -1,7 +1,20 @@
 # observable-demo
 
-## demo 介绍
+## Observable for OpenTelemetry
 
+- 收集器：OpenTelemetry Collector
+
+- Agent：OpenTelemetry Java Agent 、OpenTelemetry-Js
+
+- SDK : OpenTelemetry Java SDK
+
+- Metrics：Prometheus
+
+- 可视化：Zipkin、Jaeger
+
+- Exporter: JaegerExporter \ OtlpExporter \ ZipkinExporter
+
+## 项目介绍
 springboot-opentracing-jaeger ：介绍 `jaeger` 用法（基于springboot 应用）
 
 opentelemetry-javaagent :  为 opentelemetry-javaagent 各版本jar，方便下载使用。
