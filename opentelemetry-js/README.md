@@ -50,7 +50,7 @@ npm start
 ### ZipkinExporter
 
 #### 安装 zipkin
-https://github.com/lrwh/observable-demo/blob/main/amp/zipkin
+https://github.com/lrwh/observable-demo/tree/main/apm/zipkin
 
 
 #### 将数据推送到 zipkin
@@ -84,7 +84,7 @@ url 为 otlp http。
 
 `otlp` 协议需要通过 `opentelemetry-collector` 将数据转化后通过 `exporter` 到其他 APM 或者其他可观测平台进行UI展示.
 
-https://github.com/lrwh/observable-demo/blob/main/opentelemetry-collector
+https://github.com/lrwh/observable-demo/tree/main/opentelemetry-collector
 
 
 
