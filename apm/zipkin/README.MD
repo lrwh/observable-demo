@@ -10,7 +10,7 @@ docker run -d --name zipkin -p 9411:9411 openzipkin/zipkin:latest
 
 ## Zipkin-UI
 
-通过 http://<zipkin-server>:9411 访问 zipkin-ui
+通过 http://zipkin-server:9411 访问 zipkin-ui
 
 
 
