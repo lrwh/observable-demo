@@ -1,9 +1,3 @@
-
-
-
-
-
-
 maven pom.xml
 
 ```java
@@ -55,28 +49,18 @@ springboot-opentelemetry-jaeger-server port: 8080
 
 springboot-opentelemetry-jaeger-client port: 8081
 
-#### 错误姿势
-
-这种方式没用，网上大都用的是这种方式，我都不知道他们是怎么跑起来的，用网上的例子本地跑也是起不来。有可能是版本问题，**<mark>我用的是1.9.1，网上大多都是0点几版本。</mark>**
+#### 启动方式一
 
 ```shell
 java -javaagent:D:\\opentelemetry-javaagent\\opentelemetry-javaagent.jar \
--Dotel.trace.exporter=jaeger \
+-Dotel.traces.exporter=jaeger \
 -Dotel.exporter.jaeger.endpoint=http://localhost:14250 \
 -Dotel.resource.attributes=service.name=demo \
 -Dotel.javaagent.debug=false \
 -Dotel.metrics.exporter=none -jar springboot-opentelemetry-jaeger-client.jar --trace.exporter.host=localhost --api.url=http://localhost:8080 
 ```
 
-> [otel.javaagent 2021-12-31 00:29:47:519 +0800] [OkHttp http://localhost:4317/...] ERROR io.opentelemetry.exporter.otlp.internal.grpc.OkHttpGrpcExporter - Failed to export spans. The request could not be executed. Full error message: Failed to connect to localhost/0:0:0:0:0:0:0:1:4317
-
-
-
-从异常来看，4317端口指的就是otlp exporter，说明这样的启动配置不对。
-
-
-
-#### 正确姿势：
+#### 启动方式二
 
 配置环境变量
 
