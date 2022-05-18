@@ -77,3 +77,9 @@ http://localhost:3000/
 > 查询时需要去掉`trace_id`前面的`0x`
 
 ![](http://cdn.0512.host/images/20220518181013.png)
+
+> 遗留问题说明：
+> 
+> 1.opentelemetry-instrument 不支持 insecure 参数已提 [PR](https://github.com/open-telemetry/opentelemetry-python/pull/2696)
+> 
+> 2.python 导出使用 gRPC 协议时，导出服务端为 Tempo（1.4.1）版本时，`trace_id`能查询，但无数据。已提 [issue](https://github.com/grafana/tempo/issues/1432)
