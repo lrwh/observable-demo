@@ -75,4 +75,5 @@ python3-otel-example_1  | }
 http://localhost:3000/
 ```
 > 查询时需要去掉`trace_id`前面的`0x`
+
 ![](http://cdn.0512.host/images/20220518181013.png)
