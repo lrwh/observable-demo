@@ -1,22 +1,22 @@
 # 目录结构说明
 ```shell
 .
-├── automatic-instrumentation ------------------- [自动仪表](https://opentelemetry.io/docs/instrumentation/python/automatic/)，使用:jaeger thrift http
-│   ├── client.py ------------------------- 客户端，执行后会调用服务端，端口：8082
-│   ├── client.sh ------------------------- 客户端，执行脚本
-│   ├── server.py ------------------------- 服务端，为客户端提供服务，模拟常规接口调用
-│   └── server.sh ------------------------- 服务端，执行脚本
+├── automatic-instrumentation ------------------- 自动仪表(https://opentelemetry.io/docs/instrumentation/python/automatic/)，使用:jaeger thrift http
+│  ├── client.py -------------------------------- 客户端，执行后会调用服务端，端口：8082
+│  ├── client.sh -------------------------------- 客户端，执行脚本
+│  ├── server.py -------------------------------- 服务端，为客户端提供服务，模拟常规接口调用
+│  └── server.sh -------------------------------- 服务端，执行脚本
 ├── bootstrap.sh -------------------------------- 启动脚本，分别调用自动仪表、手动仪表相关的执行 shell 脚本
 ├── datasource.yaml ----------------------------- grafana 源数据源配置文件
 ├── docker-compose.yaml ------------------------- 整个模拟环境的 docker 编排文件
-├── Dockerfile ---------------------------------- python 运行环境容器，定制r
-├── manual-instrumentation
-│   ├── jaeger_exporter_grpc.py
-│   ├── jaeger_exporter_grpc.sh
-│   ├── jaeger_exporter_thrift.py
-│   └── jaeger_exporter_thrift.sh
-├── README.md
-└── tempo.yaml
+├── Dockerfile ----------------------------------- python 运行环境容器，已包含相关 pip 包的定制容器
+├── manual-instrumentation ---------------------- 手动仪表(https://opentelemetry.io/docs/instrumentation/python/manual/)，使用:jaeger gRPC/thrift http
+│  ├── jaeger_exporter_grpc.py ------------------ Jaeger gRPC 导出器
+│  ├── jaeger_exporter_grpc.sh ------------------ Jaeger gRPC 导出器，执行脚本
+│  ├── jaeger_exporter_thrift.py ---------------- Jaeger Thrift 导出器
+│  └── jaeger_exporter_thrift.sh ---------------- Jaeger Thrift 导出器，执行脚本
+├── README.md ----------------------------------- 说明文档
+└── tempo.yaml ---------------------------------- Tempo 容器配置文件
 ```
 
 # 镜像说明
@@ -75,4 +75,11 @@ python3-otel-example_1  | }
 http://localhost:3000/
 ```
 > 查询时需要去掉`trace_id`前面的`0x`
+
 ![](http://cdn.0512.host/images/20220518181013.png)
+
+> 遗留问题说明：
+> 
+> 1.opentelemetry-instrument 不支持 insecure 参数已提 [PR](https://github.com/open-telemetry/opentelemetry-python/pull/2696)
+> 
+> 2.python 导出使用 gRPC 协议时，导出服务端为 Tempo（1.4.1）版本时，`trace_id`能查询，但无数据。已提 [issue](https://github.com/grafana/tempo/issues/1432)
