@@ -32,6 +32,7 @@ services:
     image: python3-otel-example:1.0
     stdin_open: true
     tty: true
-    command: ["entrypoint","zsh"]
+    entrypoint: ["zsh"]
+    command: ["entrypoint"]
     depends_on:
       - grafana
