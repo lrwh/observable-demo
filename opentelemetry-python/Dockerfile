@@ -8,3 +8,6 @@ COPY manual-instrumentation/ manual-instrumentation/
 COPY bootstrap.sh .
 
 RUN ln -s $OTEL_WORKDIR/bootstrap.sh /usr/local/bin/entrypoint
+
+ENTRYPOINT ["entrypoint"]
+CMD ["zsh"]
