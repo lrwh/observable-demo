@@ -33,8 +33,13 @@
     <logger name="net.sf.json" level="ERROR" />
     <logger name="org.springframework" level="ERROR" />
 
+<!--    <root level="info">-->
+<!--        <appender-ref ref="STDOUT" />-->
+<!--        <appender-ref ref="FILE" />-->
+<!--    </root>-->
+
     <root level="info">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
     </root>
 </configuration>

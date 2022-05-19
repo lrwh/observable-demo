@@ -13,10 +13,8 @@ spring:
       suffix: .html
   main:
     allow-bean-definition-overriding: true
+  profiles:
+    active: dev
 extra:
   host: localhost
-trace:
-  exporter:
-    host: localhost
-    port: 14250
 client: false

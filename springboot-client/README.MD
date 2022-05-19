@@ -36,6 +36,26 @@ java -javaagent:../opentelemetry-javaagent/opentelemetry-javaagent.jar \
 ```java
 -Dotel.propagators=b3
 ```
+#### 开启日志
+
+##### 方式一：通过 OTLP 上报日志
+
+应用 server 和 client 将 log 通过 otlp-exporter push 到 otel-collector，再通过 otel-collector exporter 到 Elasticsearch。
+修改启动参数
+
+需要在应用启动时添加参数`-Dotel.logs.exporter=otlp`
+
+##### 方式二：通过 Logstash-logback 上报日志
+
+主要是通过 Logstash-logback  提供的 socket 方式将日志上传到 Logstash 上，需要对代码做部分调整。
+
+启动的时候指定logstash相关参数
+
+```shell script
+--spring.profiles.active=logstash \
+--logstash.host=localhost \
+--logstash.port=4560
+```
 
 #### 前端链路
 

@@ -33,8 +33,6 @@ public class ServerController {
 
     @Value("${extra.host}")
     public String clientHost;
-    @Value("${server.port}")
-    public String clientPort;
 
     @GetMapping("/")
     public String index() {
