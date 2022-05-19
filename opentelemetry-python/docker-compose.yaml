@@ -2,6 +2,8 @@ version: "3.8"
 services:
   tempo:
     image: grafana/tempo:1.4.1
+    environment:
+      - TZ=Asia/Shanghai
     command: ["-config.file=/etc/tempo.yaml"]
     volumes:
       - ./tempo.yaml:/etc/tempo.yaml
@@ -21,6 +23,7 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
       - GF_USERS_ALLOW_SIGN_UP=false
+      - TZ=Asia/Shanghai
     volumes:
       - ./datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
     depends_on:
@@ -30,6 +33,8 @@ services:
       context: .
       dockerfile: Dockerfile
     image: python3-otel-example:1.0
+    environment:
+      - TZ=Asia/Shanghai
     stdin_open: true
     tty: true
     depends_on:
