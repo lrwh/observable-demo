@@ -1,6 +1,6 @@
 # 当前demo为 Opentelemetry to Jeager、Zipkin 、Prometheus、Grafana、ELK
 
-opentelemetry-collector 版本为 0.50.0
+博客地址 https://blog.csdn.net/liurui_wuhan/article/details/124856576
 
 ```
 image: otel/opentelemetry-collector-contrib:0.51.0
