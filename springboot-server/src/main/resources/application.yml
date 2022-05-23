@@ -6,7 +6,7 @@ api:
   url: http://localhost:${server.port}
 spring:
   application:
-    name: otlp-server
+    name: server
   mvc:
     view:
       prefix: /

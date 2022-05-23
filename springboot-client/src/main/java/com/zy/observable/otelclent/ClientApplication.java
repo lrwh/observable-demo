@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OtelOtlpClientApplication {
+public class ClientApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OtelOtlpClientApplication.class, args);
+        SpringApplication.run(ClientApplication.class, args);
     }
 
 }
