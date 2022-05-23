@@ -1,6 +1,6 @@
 # 当前demo为 Opentelemetry to 观测云
 
-博客地址 
+博客地址 https://www.yuque.com/dataflux/bp/ezuo9s
 
 ```
 image: otel/opentelemetry-collector-contrib:0.51.0
