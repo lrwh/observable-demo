@@ -61,5 +61,12 @@ java -javaagent:../opentelemetry-javaagent/opentelemetry-javaagent.jar \
 
 https://github.com/lrwh/observable-demo/blob/main/opentelemetry-js
 
+### docker
+
+目前已推送到阿里云docker仓库
+
+其中内置`opentelemetry-javaagent.jar` 版本为`1.13.1`
+
+> docker pull registry.cn-shenzhen.aliyuncs.com/lr_715377484/springboot-client:latest
 
 
