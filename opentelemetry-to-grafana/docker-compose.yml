@@ -1,0 +1,66 @@
+version: '3.3'
+
+services:
+    server:
+        image: registry.cn-shenzhen.aliyuncs.com/lr_715377484/springboot-server:latest
+        container_name: springboot_server
+        ports:
+            - 8080:8080
+        environment:
+            - OTEL_EXPORTER=otlp_span,prometheus
+            - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:55680
+            - OTEL_EXPORTER_OTLP_INSECURE=true
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=springboot-server
+            - JAVA_OPTS=-javaagent:/opentelemetry-javaagent.jar
+        logging:
+            driver: loki
+            options:
+                loki-url: 'http://localhost:3100/api/prom/push'
+    loki:
+        image: grafana/loki:2.2.0
+        container_name: loki
+        command: -config.file=/etc/loki/local-config.yaml
+        ports:
+            - "3100:3100"
+        logging:
+            driver: loki
+            options:
+                loki-url: 'http://localhost:3100/api/prom/push'
+    tempo:
+        image: grafana/tempo:0.6.0
+        container_name: tempo
+        command: ["--target=all", "--storage.trace.backend=local", "--storage.trace.local.path=/var/tempo", "--auth.enabled=false"]
+        ports:
+            - 8081:80
+            - 55680:55680
+    tempo-query:
+        image: grafana/tempo-query:0.6.0
+        container_name: tempo-query
+        #command: ["--grpc-storage-plugin.configuration-file=/etc/tempo-query.yaml"]
+        environment:
+            - BACKEND=tempo:80
+        volumes:
+            - ./etc/tempo-query.yaml:/etc/tempo-query.yaml
+        ports:
+            - "16686:16686"  # jaeger-ui
+        depends_on:
+            - tempo
+        logging:
+            driver: loki
+            options:
+                loki-url: 'http://localhost:3100/api/prom/push'
+    grafana:
+        image: grafana/grafana:7.3.7
+        container_name: grafana
+        volumes:
+            - ./config/grafana:/etc/grafana/provisioning/datasources
+        environment:
+            - GF_AUTH_ANONYMOUS_ENABLED=true
+            - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+            - GF_AUTH_DISABLE_LOGIN_FORM=true
+        ports:
+            - "3000:3000"
+        logging:
+            driver: loki
+            options:
+                loki-url: 'http://localhost:3100/api/prom/push'                
