@@ -26,6 +26,7 @@
 ├── opentelemetry-javaagent --------------------- 为 opentelemetry-javaagent 各版本jar，方便下载使用
 ├── opentelemetry-js ---------------------------- 主要演示 opentelemetry 提供的前端RUM功能以及如何跟后端APM结合使用，完成全链路追踪
 ├── opentelemetry-python ------------------------ opentelemetry python 使用方式（手动、自动），后端采用了 grafana tempo（jaeger gRPC/thrift 协议）
+├── opentelemetry-to-grafana -------------------- 基于opentelemetry otlp协议，将数据推送至 grafana相关组件tempo 和 loki
 ├── otel-collector-demo 
 ├── springboot-client --------------------------- Springboot 客户端
 ├── springboot-ddtrace-server ------------------- 主要介绍datadog 的 apm 组件 ddtrace 的使用方法（基于 Springboot 应用）

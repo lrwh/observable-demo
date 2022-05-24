@@ -47,6 +47,12 @@ Loki是 Grafana Labs 团队最新的开源项目，是一个水平可扩展，�
 
 5. 访问grafana查看日志和链路信息
 
+## 视图
+![loki](../images/loki.png)
+
+
+![tempo](../images/tempo.png)
+
 ## 拓展
 
 Tempo存储和检索跟踪，是一个后端服务，tempo同时需要与其他链路追踪协议一起使用：Jaeger、Zipkin 、OPTL 。Tempo 并不能算是 Traces 采集器，而是中转站，链路用其他协议，如 Jaeger、Zipkin 等，将数据汇聚至 Tempo。
