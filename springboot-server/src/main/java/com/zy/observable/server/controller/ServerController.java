@@ -1,5 +1,6 @@
 package com.zy.observable.server.controller;
 
+import com.zy.observable.server.bean.AjaxResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class ServerController {
     @Value("${extra.host}")
     public String clientHost;
 
+    @Value("${sleep:0}")
+    public Long sleep;
+
     @GetMapping("/")
     public String index() {
         return "index";
@@ -41,49 +45,55 @@ public class ServerController {
 
     @GetMapping("/gateway")
     @ResponseBody
-    public String gateway(String tag) {
+    public AjaxResult gateway(String tag) {
         logger.info("this is tag");
         sleep();
         httpTemplate.getForEntity(apiUrl + "/resource", String.class).getBody();
         httpTemplate.getForEntity(apiUrl + "/auth", String.class).getBody();
         if (client) {
-            httpTemplate.getForEntity("http://" + clientHost + ":8081/client", String.class).getBody();
+            try {
+                httpTemplate.getForEntity("http://" + clientHost + ":8081/client", String.class).getBody();
+            }catch (Exception e){
+                return AjaxResult.error("client 调用失败");
+            }
         }
-        return httpTemplate.getForEntity(apiUrl + "/billing?tag=" + tag, String.class).getBody();
+        return httpTemplate.getForEntity(apiUrl + "/billing?tag=" + tag, AjaxResult.class).getBody();
     }
 
     @GetMapping("/resource")
     @ResponseBody
-    public String resource() {
+    public AjaxResult resource() {
         logger.info("this is resource");
-        return "this is resource";
+        return AjaxResult.success("this is resource");
     }
 
     @GetMapping("/auth")
     @ResponseBody
-    public String auth() {
+    public AjaxResult auth() {
         logger.info("this is auth");
         sleep();
-        return "this is auth";
+        return AjaxResult.success("this is auth");
     }
 
     @GetMapping("/billing")
     @ResponseBody
-    public String billing(String tag) {
+    public AjaxResult billing(String tag) {
         logger.info("this is method3,{}", tag);
         sleep();
         if (Optional.ofNullable(tag).get().equalsIgnoreCase("error")) {
             System.out.println(1 / 0);
         }
-        return "下单成功";
+        return AjaxResult.success("下单成功");
     }
 
     private void sleep() {
-//        try {
-//            Thread.sleep(3000L);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        if (sleep>0L) {
+            try {
+                Thread.sleep(sleep);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @RequestMapping("/getClient")
@@ -98,6 +108,20 @@ public class ServerController {
         client = c;
         return result();
     }
+
+    @RequestMapping("/sleep")
+    @ResponseBody
+    public String setSleep(Long sleep){
+        this.sleep = sleep;
+        return "休眠["+sleep+" ms ]时间设置成功";
+    }
+
+    @GetMapping("/testError")
+    @ResponseBody
+    public AjaxResult error(){
+        return new AjaxResult(400,"异常测试");
+    }
+
 
     private String result() {
         return client ? "【已开启】客户端请求" : "【已关闭】客户端请求";
