@@ -100,4 +100,13 @@ public class IndexController {
     private String result(){
         return client ? "【已开启】客户端请求" : "【已关闭】客户端请求";
     }
+
+
+    @GetMapping("/counter")
+    @ResponseBody
+    public Integer counter(){
+        int get = ConstantsUtils.COUNTER.addAndGet(1);
+        logger.info("counter:{}",get);
+        return get;
+    }
 }
