@@ -48,6 +48,7 @@ public class IndexController {
         logger.info("this is tag");
         sleep();
         testService.getDemo();
+        testService.apiTrace();
         httpTemplate.getForEntity(apiUrl + "/resource", String.class).getBody();
         httpTemplate.getForEntity(apiUrl + "/auth", String.class).getBody();
         if (client) {
