@@ -30,5 +30,9 @@ services:
       context: .
       dockerfile: Dockerfile
     image: python3-otel-example:1.0
+    environment:
+      - TZ=Asia/Shanghai
+    stdin_open: true
+    tty: true
     depends_on:
       - grafana

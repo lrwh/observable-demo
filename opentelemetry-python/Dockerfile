@@ -9,4 +9,5 @@ COPY bootstrap.sh .
 
 RUN ln -s $OTEL_WORKDIR/bootstrap.sh /usr/local/bin/entrypoint
 
-CMD ["entrypoint"]
+ENTRYPOINT ["entrypoint"]
+CMD ["zsh"]

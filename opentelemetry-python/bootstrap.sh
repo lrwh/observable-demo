@@ -12,3 +12,5 @@ echo -e "\033[41;33m Starting jaeger exporter grpc... \033[0m"
 . $OTEL_WORKDIR/manual-instrumentation/jaeger_exporter_grpc.sh
 echo -e "\033[41;33m Starting jaeger exporter thrift... \033[0m"
 . $OTEL_WORKDIR/manual-instrumentation/jaeger_exporter_thrift.sh
+
+exec "$@"
