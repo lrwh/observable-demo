@@ -85,7 +85,7 @@ ddtrace 提供了 Baggage 方式，让指定的tag在链路上进行传递。比
 这里需要配合 datakit 的ddtrace采集器配置一起使用  
 ```toml
 customer_tags = ["username", "job"]
-``
+```
 
 在观测云上的效果
 
