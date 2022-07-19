@@ -37,6 +37,32 @@
             <artifactId>dd-trace-api</artifactId>
             <version>0.102.0</version>
         </dependency>
+        <dependency>
+            <groupId>io.opentracing</groupId>
+            <artifactId>opentracing-api</artifactId>
+            <version>0.33.0</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.opentracing</groupId>-->
+<!--            <artifactId>opentracing-mock</artifactId>-->
+<!--            <version>0.33.0</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>io.opentracing</groupId>
+            <artifactId>opentracing-util</artifactId>
+            <version>0.33.0</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.datadoghq</groupId>-->
+<!--            <artifactId>dd-java-agent</artifactId>-->
+<!--            <version>0.104.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.datadoghq</groupId>-->
+<!--            <artifactId>dd-trace-core</artifactId>-->
+<!--            <version>0.52.0</version>-->
+<!--        </dependency>-->
+
     </dependencies>
     <build>
         <finalName>${project.artifactId}</finalName>

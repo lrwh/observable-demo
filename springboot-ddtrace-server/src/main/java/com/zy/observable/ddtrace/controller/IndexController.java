@@ -20,7 +20,7 @@ import java.util.Optional;
  * @date 2021/12/29 17:42
  */
 @Controller
-public class IndexController {
+public class IndexController extends  BaseController{
 
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
@@ -34,6 +34,8 @@ public class IndexController {
     public String extraHost;
     @Autowired
     private TestService testService;
+	@Value("${sleep:0}")
+    public Long sleep;
 
     @GetMapping("/")
     public String index() {
@@ -52,7 +54,7 @@ public class IndexController {
         httpTemplate.getForEntity(apiUrl + "/resource", String.class).getBody();
         httpTemplate.getForEntity(apiUrl + "/auth", String.class).getBody();
         if (client) {
-            httpTemplate.getForEntity("http://"+extraHost+":8081/client", String.class).getBody();
+            httpTemplate.getForEntity("http://" + extraHost + ":8081/client", String.class).getBody();
         }
         return httpTemplate.getForEntity(apiUrl + "/billing?tag=" + tag, String.class).getBody();
     }
@@ -83,7 +85,20 @@ public class IndexController {
     }
 
     private void sleep() {
-
+        if (sleep>0L) {
+            try {
+                Thread.sleep(sleep);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+	
+	@RequestMapping("/sleep")
+    @ResponseBody
+    public String setSleep(Long sleep){
+        this.sleep = sleep;
+        return "休眠["+sleep+" ms ]时间设置成功";
     }
 
     @RequestMapping("/getClient")
@@ -98,16 +113,11 @@ public class IndexController {
         client = c;
         return result();
     }
-    private String result(){
+
+    private String result() {
         return client ? "【已开启】客户端请求" : "【已关闭】客户端请求";
     }
 
 
-    @GetMapping("/counter")
-    @ResponseBody
-    public Integer counter(){
-        int get = ConstantsUtils.COUNTER.addAndGet(1);
-        logger.info("counter:{}",get);
-        return get;
-    }
+
 }

@@ -4,7 +4,7 @@
 
 当前案例使用 ddtrace 版本0.78.3和 0.97.0（最新版本）进行测试
 
-博客文档：https://www.yuque.com/dataflux/bp/rwsgsi
+博客文档：https://docs.guance.com/best-practices/monitoring/ddtrace-skill/
 
 启动
 
@@ -25,15 +25,21 @@ http://localhost:8080
 以java为例
 ﻿
 ``` 
-        <dependency>
-﻿
-            <groupId>com.datadoghq</groupId>
-﻿
-            <artifactId>dd-trace-api</artifactId>
-﻿
-            <version>0.102.0</version>
-﻿
-        </dependency>
+    <dependency>
+        <groupId>com.datadoghq</groupId>
+        <artifactId>dd-trace-api</artifactId>
+        <version>0.102.0</version>
+    </dependency>
+    <dependency>
+        <groupId>io.opentracing</groupId>
+        <artifactId>opentracing-api</artifactId>
+        <version>0.33.0</version>
+    </dependency>
+    <dependency>
+        <groupId>io.opentracing</groupId>
+        <artifactId>opentracing-util</artifactId>
+        <version>0.33.0</version>
+    </dependency>
 ```
 
 在对应需要埋点的方法添加注解  @Trace
@@ -64,3 +70,23 @@ testService.apiTrace();
 ```
 修改后，效果如下：
 ![](../images/ddtrace-001.png)
+
+## 让业务关键tag在后端链路进行传递
+
+ddtrace 提供了 Baggage 方式，让指定的tag在链路上进行传递。比如用户名、岗位等信息，方便分析用户行为。
+
+> span.setBaggageItem("username","liurui");
+
+接口请求，携带两个header：dd-username、dd-job
+
+![](../images/ddtrace-header-tag.png)
+
+### datakit 配置  
+这里需要配合 datakit 的ddtrace采集器配置一起使用  
+```toml
+customer_tags = ["username", "job"]
+``
+
+在观测云上的效果
+
+![](../images/ddtrace-baggage-tag.gif)
