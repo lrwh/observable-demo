@@ -33,6 +33,7 @@ public class TraceBaggageFilter implements Filter {
             while (headerNames.hasMoreElements()) {
                 final String header = headerNames.nextElement();
                 String value = request.getHeader(header);
+                System.out.println(header+"\t\t\t"+value);
                 if (StringUtils.startsWith(header,PREFIX) && StringUtils.isNotBlank(value)){
                     //Baggage 可以在链路之间进行传递，而普通的tag不行
                     span.setBaggageItem(header.replace(PREFIX,""),value);

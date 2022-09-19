@@ -4,7 +4,7 @@
     <springProperty scope="context" name="logName" source="spring.application.name" defaultValue="localhost.log"/>
     <!-- 配置后可以动态修改日志级别-->
     <jmxConfigurator />
-    <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] %X{dd.service} %X{dd.trace_id} %X{dd.span_id} - %msg%n" />
+    <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - [%method,%line] %X{dd.service} %X{dd.trace_id} %X{dd.span_id} - %msg%n" />
 <!--    <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] %X{dd.service} %X{dd.trace_id} %X{dd.span_id} - traceId=%X{traceId} spanId=%X{spanId} %msg%n" />-->
 
     <!-- %m输出的信息,%p日志级别,%t线程名,%d日期,%c类的全名,,,, -->
@@ -40,7 +40,7 @@
     <logger name="com.github.pagehelper.mapper" level="DEBUG" />
     <logger name="org.apache.ibatis" level="DEBUG" />
 
-    <root level="info">
+    <root level="debug">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </root>

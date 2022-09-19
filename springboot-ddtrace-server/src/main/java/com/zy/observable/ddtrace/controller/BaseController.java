@@ -1,6 +1,8 @@
 package com.zy.observable.ddtrace.controller;
 
 import com.zy.observable.ddtrace.util.ConstantsUtils;
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

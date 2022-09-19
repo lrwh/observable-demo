@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8086
 api:
   url: http://localhost:${server.port}
 spring:
@@ -14,3 +14,6 @@ spring:
 extra:
   host: localhost
 client: false
+
+logging:
+  config: classpath:log4j2.xml
