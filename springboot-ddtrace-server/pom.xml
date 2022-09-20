@@ -62,11 +62,11 @@
             <artifactId>opentracing-util</artifactId>
             <version>0.33.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.datadoghq</groupId>
-            <artifactId>dd-java-agent</artifactId>
-            <version>${dd.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.datadoghq</groupId>-->
+<!--            <artifactId>dd-java-agent</artifactId>-->
+<!--            <version>${dd.version}</version>-->
+<!--        </dependency>-->
 <!--        <dependency>-->
 <!--            <groupId>com.datadoghq</groupId>-->
 <!--            <artifactId>dd-trace-core</artifactId>-->

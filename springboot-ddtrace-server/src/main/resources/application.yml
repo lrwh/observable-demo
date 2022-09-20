@@ -15,5 +15,5 @@ extra:
   host: localhost
 client: false
 
-logging:
-  config: classpath:log4j2.xml
+#logging:
+#  config: classpath:log4j2.xml
