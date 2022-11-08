@@ -18,7 +18,7 @@
         <grpc.version>1.36.1</grpc.version>
 <!--        <dd.version>0.102.0</dd.version>-->
 <!--        <dd.version>0.98.1</dd.version>-->
-        <dd.version>0.105.0</dd.version>
+        <dd.version>0.114.0</dd.version>
     </properties>
     <dependencies>
         <dependency>
@@ -41,12 +41,19 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.datadoghq</groupId>-->
+<!--            <artifactId>dd-trace-api</artifactId>-->
+<!--&lt;!&ndash;            <version>0.98.1</version>&ndash;&gt;-->
+<!--            <version>${dd.version}</version>-->
+<!--        </dependency>-->
+
         <dependency>
             <groupId>com.datadoghq</groupId>
             <artifactId>dd-trace-api</artifactId>
-<!--            <version>0.98.1</version>-->
             <version>${dd.version}</version>
         </dependency>
+
         <dependency>
             <groupId>io.opentracing</groupId>
             <artifactId>opentracing-api</artifactId>
