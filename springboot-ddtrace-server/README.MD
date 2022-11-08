@@ -2,7 +2,7 @@
 
 主要演示ddtrace 的一些高级用法
 
-当前案例使用 ddtrace 版本0.78.3和 0.97.0（最新版本）进行测试
+当前案例使用 ddtrace 版本 0.114.0（最新版本）进行测试
 
 博客文档：https://docs.guance.com/best-practices/monitoring/ddtrace-skill/
 
@@ -28,7 +28,7 @@ http://localhost:8080
     <dependency>
         <groupId>com.datadoghq</groupId>
         <artifactId>dd-trace-api</artifactId>
-        <version>0.102.0</version>
+        <version>0.114.0</version>
     </dependency>
     <dependency>
         <groupId>io.opentracing</groupId>
