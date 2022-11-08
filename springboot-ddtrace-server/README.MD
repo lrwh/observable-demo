@@ -9,7 +9,7 @@
 启动
 
 ``` shell script
-java -javaagent:D:/ddtrace/dd-java-agent-0.97.0.jar \
+java -javaagent:D:/ddtrace/dd-java-agent-0.114.0.jar \
 -Ddd.service=ddtrace-server \
 -Ddd.agent.port=9529 \
 -jar springboot-ddtrace-server.jar
