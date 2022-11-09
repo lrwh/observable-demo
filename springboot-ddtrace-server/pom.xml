@@ -41,12 +41,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.datadoghq</groupId>-->
-<!--            <artifactId>dd-trace-api</artifactId>-->
-<!--&lt;!&ndash;            <version>0.98.1</version>&ndash;&gt;-->
-<!--            <version>${dd.version}</version>-->
-<!--        </dependency>-->
 
         <dependency>
             <groupId>com.datadoghq</groupId>
@@ -68,23 +62,6 @@
             <groupId>io.opentracing</groupId>
             <artifactId>opentracing-util</artifactId>
             <version>0.33.0</version>
-        </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.datadoghq</groupId>-->
-<!--            <artifactId>dd-java-agent</artifactId>-->
-<!--            <version>${dd.version}</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.datadoghq</groupId>-->
-<!--            <artifactId>dd-trace-core</artifactId>-->
-<!--            <version>0.52.0</version>-->
-<!--        </dependency>-->
-
-        <!-- Datadog OpenTracing bridge (only needed if you do not use dd-java-agent for autoinstrumentation) -->
-        <dependency>
-            <groupId>com.datadoghq</groupId>
-            <artifactId>dd-trace-ot</artifactId>
-            <version>${dd.version}</version>
         </dependency>
 
         <dependency>
