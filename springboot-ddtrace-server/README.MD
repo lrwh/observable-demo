@@ -90,3 +90,56 @@ customer_tags = ["username", "job"]
 在观测云上的效果
 
 ![](../images/ddtrace-baggage-tag.gif)
+
+
+## 自定义 span
+
+通常，应用会对业务逻辑进行异常处理，相关的链路可能因为无法标记为 error 从而导致无法正常统计到应用的 error trace，一般为 `try-catch` 或者全局异常捕获。这时候就需要对链路进行标记处理，可以通过自定义 span 的方式来标记这些 span 为 error span，只需要在 catch 处进行标记即可.
+
+通过以下方式获取当前 span 信息
+
+> final Span span = GlobalTracer.get().activeSpan();
+
+标记 span 为 error
+
+> span.setTag(Tags.ERROR, true);
+
+如果当前方法是放在catch里面，则可以将 track 信息也可以输出到 span 里面。
+
+可以将 error span 处理逻辑作为一个公共的函数共全局使用，代码如下所示：
+
+``` java hl_lines="4 6 7 11"
+    private void buildErrorTrace(Exception ex) {
+        final Span span = GlobalTracer.get().activeSpan();
+        if (span != null) {
+            span.setTag(Tags.ERROR, true);
+            span.log(Collections.singletonMap(Fields.ERROR_OBJECT, ex));
+            span.setTag(DDTags.ERROR_MSG, ex.getMessage());
+            span.setTag(DDTags.ERROR_TYPE, ex.getClass().getName());
+
+            final StringWriter errorString = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errorString));
+            span.setTag(DDTags.ERROR_STACK, errorString.toString());
+        }
+
+    }
+```
+
+调用方代码
+
+``` java hl_lines="10"
+@GetMapping("/gateway")
+    @ResponseBody
+    public String gateway(String tag) {
+        ......
+        try {
+            if (client) {
+                httpTemplate.getForEntity("http://" + extraHost + ":8081/client", String.class).getBody();
+            }
+        } catch (Exception e) {
+            buildErrorTrace(e);
+        }
+        return httpTemplate.getForEntity(apiUrl + "/billing?tag=" + tag, String.class).getBody();
+    }
+
+```
