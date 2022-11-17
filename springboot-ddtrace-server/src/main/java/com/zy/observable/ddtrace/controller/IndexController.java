@@ -91,21 +91,6 @@ public class IndexController extends BaseController {
         return httpTemplate.getForEntity(apiUrl + "/billing?tag=" + tag, String.class).getBody();
     }
 
-    private void buildErrorTrace(Exception ex) {
-        final Span span = GlobalTracer.get().activeSpan();
-        if (span != null) {
-            span.setTag(Tags.ERROR, true);
-            span.log(Collections.singletonMap(Fields.ERROR_OBJECT, ex));
-            span.setTag(DDTags.ERROR_MSG, ex.getMessage());
-            span.setTag(DDTags.ERROR_TYPE, ex.getClass().getName());
-
-            final StringWriter errorString = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errorString));
-            span.setTag(DDTags.ERROR_STACK, errorString.toString());
-        }
-
-    }
-
     void inject() {
         Tracer tracer = GlobalTracer.get();
         Span span = tracer.buildSpan("test-inject").start();
