@@ -50,6 +50,7 @@
         <module>springboot-ddtrace-server</module>
         <module>springboot-server</module>
         <module>springboot-client</module>
+        <module>profiling</module>
     </modules>
     <packaging>pom</packaging>
 
