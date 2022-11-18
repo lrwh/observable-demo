@@ -33,6 +33,18 @@ public class ProfilingController extends BaseController {
      **/
     @GetMapping("/generator")
     public String generatorData(Long dataSize) {
+        String filePath;
+        try {
+            filePath = fileName.substring(0, fileName.lastIndexOf("/"));
+            File file = new File(filePath);
+            if (!file.exists()){
+                file.mkdirs();
+            }
+        }catch (Exception e){
+            buildErrorTrace(e);
+            logger.error("write error! 文件夹创建异常 ",e);
+            return "write error!";
+        }
         try (FileWriter writer = new FileWriter(fileName)) {
             writer.write("");//清空原文件内容
             if (dataSize == null) {
@@ -44,6 +56,7 @@ public class ProfilingController extends BaseController {
             writer.flush();
         } catch (Exception e) {
             buildErrorTrace(e);
+            logger.error("write error!",e);
             return "write error!";
         }
         return "write success!";
@@ -78,6 +91,7 @@ public class ProfilingController extends BaseController {
             }
         } catch (IOException e) {
             buildErrorTrace(e);
+            logger.error("read error!",e);
             flag = false;
         }
         long time = System.nanoTime() - startTime;
