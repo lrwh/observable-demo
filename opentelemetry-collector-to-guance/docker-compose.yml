@@ -1,6 +1,30 @@
 version: '3.3'
 
 services:
+    server:
+        image: registry.cn-shenzhen.aliyuncs.com/lr_715377484/springboot-server:latest
+        container_name: springboot_server
+        ports:
+            - 8080:8080
+        environment:
+            - OTEL_EXPORTER=otlp
+            - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+            - OTEL_EXPORTER_OTLP_INSECURE=true
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=springboot-server,env=dev
+            - JAVA_OPTS=-javaagent:/opentelemetry-javaagent.jar
+            - PARAMS=--extra.host=172.31.19.50 --client=true # client host,自行替换,client=true 开启客户端访问，默认是 false
+          #  - PARAMS=--spring.profiles.active=logstash --logstash.host=192.168.91.11 --logstash.port=4560 # 日志通过 socket 上报到logstash
+    client:
+        image: registry.cn-shenzhen.aliyuncs.com/lr_715377484/springboot-client:latest
+        container_name: springboot_client
+        ports:
+            - 8081:8081
+        environment:
+            - OTEL_EXPORTER=otlp
+            - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+            - OTEL_EXPORTER_OTLP_INSECURE=true
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=springboot-client,env=dev
+            - JAVA_OPTS=-javaagent:/opentelemetry-javaagent.jar
     # Collector
     otel-collector:
         image: otel/opentelemetry-collector-contrib:0.51.0
@@ -15,4 +39,3 @@ services:
             - "4350:4317"        # OTLP gRPC receiver
             - "55670:55679" # zpages extension
             - "4318:4318"
-
