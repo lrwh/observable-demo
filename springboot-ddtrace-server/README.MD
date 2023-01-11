@@ -163,3 +163,6 @@ customer_tags = ["username", "job"]
         serverSpan.finish();
     }
 ```
+效果图
+
+![](../images/ddtrace-buildspan.png)
