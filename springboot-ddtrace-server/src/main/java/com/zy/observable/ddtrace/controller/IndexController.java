@@ -218,4 +218,22 @@ public class IndexController extends BaseController {
         return "200";
     }
 
+    @RequestMapping("/buildSpan")
+    @ResponseBody
+    public String buildSpan(){
+        // 获取一个 tracer 对象
+        Tracer tracer = GlobalTracer.get();
+        // 获取当前 span
+        final Span span = GlobalTracer.get().activeSpan();
+        // 创建三个子span
+        for (int i = 0; i <3 ; i++) {
+            Span serverSpan = tracer.buildSpan("spanName" + i) // 配置span的名称
+                    .withTag("service_name", "someService" + i) // 配置span tag
+                    .asChildOf(span) // 设置span的 父span
+                    .start(); // 开启一个span
+            tracer.activateSpan(serverSpan).close();
+            serverSpan.finish();
+        }
+        return "buildSpan success";
+    }
 }
