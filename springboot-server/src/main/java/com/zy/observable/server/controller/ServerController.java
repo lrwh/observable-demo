@@ -43,7 +43,8 @@ public class ServerController {
         return "index";
     }
 
-    @GetMapping("/gateway")
+//    @GetMapping("/gateway")
+    @RequestMapping("/gateway")
     @ResponseBody
     public AjaxResult gateway(String tag) {
         logger.info("this is tag");
@@ -60,14 +61,14 @@ public class ServerController {
         return httpTemplate.getForEntity(apiUrl + "/billing?tag=" + tag, AjaxResult.class).getBody();
     }
 
-    @GetMapping("/resource")
+    @RequestMapping("/resource")
     @ResponseBody
     public AjaxResult resource() {
         logger.info("this is resource");
         return AjaxResult.success("this is resource");
     }
 
-    @GetMapping("/auth")
+    @RequestMapping("/auth")
     @ResponseBody
     public AjaxResult auth() {
         logger.info("this is auth");
@@ -75,7 +76,7 @@ public class ServerController {
         return AjaxResult.success("this is auth");
     }
 
-    @GetMapping("/billing")
+    @RequestMapping("/billing")
     @ResponseBody
     public AjaxResult billing(String tag) {
         logger.info("this is method3,{}", tag);

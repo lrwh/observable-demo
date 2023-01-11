@@ -10,9 +10,29 @@
     <springProperty scope="context" name="logstashPort" source="logstash.port" defaultValue="4560"/>
     <!-- %m输出的信息,%p日志级别,%t线程名,%d日期,%c类的全名,,,, -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>${log.pattern}</pattern>
-            <charset>UTF-8</charset>
+        <!-- 日志输出编码 -->
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>UTC+8</timeZone>
+                </timestamp>
+                <pattern>
+                    <pattern>
+                        {
+                        "podName":"${podName:-}",
+                        "namespace":"${k8sNamespace:-}",
+                        "severity": "%level",
+                        "serverName": "${logName:-}",
+                        "traceId": "%X{trace_id:-}",
+                        "spanId": "%X{span_id:-}",
+                        "pid": "${PID:-}",
+                        "thread": "%thread",
+                        "class": "%logger{40}",
+                        "message": "%message\n%exception"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
         </encoder>
     </appender>
 
@@ -69,6 +89,6 @@
 
     <root level="info">
         <appender-ref ref="STDOUT"/>
-        <appender-ref ref="LOGSTASH"/>
+<!--        <appender-ref ref="LOGSTASH"/>-->
     </root>
 </configuration>

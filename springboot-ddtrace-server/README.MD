@@ -92,7 +92,7 @@ customer_tags = ["username", "job"]
 ![](../images/ddtrace-baggage-tag.gif)
 
 
-## 自定义 span
+## 重写 span
 
 通常，应用会对业务逻辑进行异常处理，相关的链路可能因为无法标记为 error 从而导致无法正常统计到应用的 error trace，一般为 `try-catch` 或者全局异常捕获。这时候就需要对链路进行标记处理，可以通过自定义 span 的方式来标记这些 span 为 error span，只需要在 catch 处进行标记即可.
 
@@ -142,4 +142,24 @@ customer_tags = ["username", "job"]
         return httpTemplate.getForEntity(apiUrl + "/billing?tag=" + tag, String.class).getBody();
     }
 
+```
+
+## 自定义 span
+
+通过自定义 span，能够让用户自定义业务链路数据。
+
+```java
+    // 获取一个 tracer 对象
+        Tracer tracer = GlobalTracer.get();
+    // 获取当前 span
+    final Span span = GlobalTracer.get().activeSpan();
+    // 创建三个子span
+    for (int i = 0; i <3 ; i++) {
+        Span serverSpan = tracer.buildSpan("spanName" + i) // 配置span的名称
+        .withTag("service_name", "someService" + i) // 配置span tag
+        .asChildOf(span) // 设置span的 父span
+        .start(); // 开启一个span
+        tracer.activateSpan(serverSpan).close();
+        serverSpan.finish();
+    }
 ```
