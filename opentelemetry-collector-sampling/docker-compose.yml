@@ -14,7 +14,7 @@ services:
             - JAVA_OPTS=-javaagent:/opentelemetry-javaagent.jar
     # Collector
     otel-collector:
-        image: otel/opentelemetry-collector-contrib:0.51.0
+        image: otel/opentelemetry-collector-contrib:0.69.0
         command: ["--config=/etc/otel-collector-config.yaml"]
         volumes:
             - ./otel-collector-config-sampling.yaml:/etc/otel-collector-config.yaml
