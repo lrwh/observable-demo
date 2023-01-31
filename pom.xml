@@ -51,6 +51,7 @@
         <module>springboot-server</module>
         <module>springboot-client</module>
         <module>profiling</module>
+        <module>springboot-server-skywalking</module>
     </modules>
     <packaging>pom</packaging>
 
