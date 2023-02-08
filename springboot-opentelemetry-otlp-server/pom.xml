@@ -42,12 +42,21 @@
         </dependency>
         <dependency>
             <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-extension-annotations</artifactId>
         </dependency>
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-semconv</artifactId>
-            <version>1.9.0-alpha</version>
+            <version>1.21.0-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>
+            <version>1.21.0-alpha</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -59,7 +68,8 @@
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-bom</artifactId>
-            <version>1.9.1</version>
+            <version>1.21.0</version>
+<!--            <version>1.9.1</version>-->
             <type>pom</type>
             <scope>import</scope>
         </dependency>

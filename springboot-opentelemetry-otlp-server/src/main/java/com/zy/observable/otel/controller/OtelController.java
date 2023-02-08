@@ -5,10 +5,7 @@ import com.zy.observable.otel.util.ConstantsUtils;
 import io.opentelemetry.api.baggage.Baggage;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
-import io.opentelemetry.api.trace.Span;
-import io.opentelemetry.api.trace.SpanContext;
-import io.opentelemetry.api.trace.SpanKind;
-import io.opentelemetry.api.trace.StatusCode;
+import io.opentelemetry.api.trace.*;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 import io.opentelemetry.context.propagation.TextMapGetter;
@@ -20,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -271,5 +269,36 @@ public class OtelController extends BaseController {
     }
     private String result(){
         return client ? "【已开启】客户端请求" : "【已关闭】客户端请求";
+    }
+
+
+    /***
+     * @Description 通过已知的traceId和spanId,来构造一个新span。 需要特别注意，依据当前测试写法的请求自身会产生一个新的trace信息。新构造的span是依据传入的参数进行构造。
+     * @Param [spanName, traceId, spanId]
+     * @return java.lang.String
+     **/
+    @GetMapping("/customSpanByTraceIdAndSpanId")
+    @ResponseBody
+    public String customSpanByTraceIdAndSpanId(String spanName,String traceId,String spanId){
+        assert StringUtils.isEmpty(spanName):"spanName 不能为空";
+        assert StringUtils.isEmpty(traceId):"traceId 不能为空";
+        assert StringUtils.isEmpty(spanId):"spanId 不能为空";
+        Context context =
+                withSpanContext(
+                        SpanContext.create(
+                                traceId, spanId, TraceFlags.getSampled(), TraceState.getDefault()),
+                        Context.current());
+        Span span = tracer.spanBuilder(spanName)
+                .setParent(context)
+                .startSpan();
+        span.setAttribute("attribute.a2", "some value");
+        span.setAttribute("func","attr");
+        span.setAttribute("app","otel3");
+        span.end();
+        return buildTraceUrl(span.getSpanContext().getTraceId());
+    }
+
+    private Context withSpanContext(SpanContext spanContext, Context context) {
+        return context.with(Span.wrap(spanContext));
     }
 }

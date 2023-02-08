@@ -11,11 +11,8 @@ public class OtelOtlpServerApplication {
     public static void main(String[] args) {
         SpringApplication.run(OtelOtlpServerApplication.class, args);
     }
-
-
-
     @Bean
-    public RestTemplate httpTemplate(){
+    public RestTemplate httpTemplate() {
         return new RestTemplate();
     }
 }
