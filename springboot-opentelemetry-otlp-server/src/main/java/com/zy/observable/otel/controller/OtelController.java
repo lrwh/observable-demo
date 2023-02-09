@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -280,9 +281,9 @@ public class OtelController extends BaseController {
     @GetMapping("/customSpanByTraceIdAndSpanId")
     @ResponseBody
     public String customSpanByTraceIdAndSpanId(String spanName,String traceId,String spanId){
-        assert StringUtils.isEmpty(spanName):"spanName 不能为空";
-        assert StringUtils.isEmpty(traceId):"traceId 不能为空";
-        assert StringUtils.isEmpty(spanId):"spanId 不能为空";
+        Assert.notNull(spanName, "spanName 不能为空");
+        Assert.notNull(traceId, "traceId 不能为空");
+        Assert.notNull(spanId, "spanId 不能为空");
         Context context =
                 withSpanContext(
                         SpanContext.create(
