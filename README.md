@@ -10,7 +10,7 @@
 
 - Metrics：Prometheus
 
-- 可视化：Zipkin、Jaeger
+- 可视化：Zipkin、Jaeger、观测云
 
 - Exporter: JaegerExporter \ OtlpExporter \ ZipkinExporter
 
@@ -20,14 +20,16 @@
 ├── apm ----------------------------------------- 主要是常见apm 安装使用手册
 ├── images -------------------------------------- 主要是各个项目使用的image 集合
 ├── opentelemetry-collector --------------------- 为 otel 官方采集器用法
+├── opentelemetry-collector-sampling ------------ otel-collector 采用用法
 ├── opentelemetry-collector-to-all -------------- 为 otel 日志、trace(RUM\APM)、metric 解决方案 demo
 ├── ├── elk ------------------------------------- docker 方式部署 ELK 
-├── opentelemetry-collector-to-guance ----------- 为 otel-collector 输出相关 日志、trace(RUM\APM)、metric 到 观测云平台
+├── opentelemetry-collector-to-guance ----------- 为 otel-collector 输出相关 日志、trace(RUM\APM)、metric 到 [观测云平台](https://www.guance.com)
 ├── opentelemetry-javaagent --------------------- 为 opentelemetry-javaagent 各版本jar，方便下载使用
 ├── opentelemetry-js ---------------------------- 主要演示 opentelemetry 提供的前端RUM功能以及如何跟后端APM结合使用，完成全链路追踪
 ├── opentelemetry-python ------------------------ opentelemetry python 使用方式（手动、自动），后端采用了 grafana tempo（jaeger gRPC/thrift 协议）
 ├── opentelemetry-to-grafana -------------------- 基于opentelemetry otlp协议，将数据推送至 grafana相关组件tempo 和 loki
 ├── otel-collector-demo 
+├── profiling  ---------------------------------- profiling demo  
 ├── springboot-client --------------------------- Springboot 客户端
 ├── springboot-ddtrace-server ------------------- 主要介绍datadog 的 apm 组件 ddtrace 的使用方法（基于 Springboot 应用）
 ├── springboot-opentelemetry-jaeger-client ------ 介绍 opentelemetry 的 jaegerExporter 用法（基于Springboot分布式应用客户端）
