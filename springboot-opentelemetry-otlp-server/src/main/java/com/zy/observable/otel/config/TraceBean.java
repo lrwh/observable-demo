@@ -4,19 +4,11 @@ import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.metrics.Meter;
-import io.opentelemetry.api.metrics.ObservableDoubleGauge;
 import io.opentelemetry.api.trace.Tracer;
-import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.sdk.autoconfigure.AutoConfiguredOpenTelemetrySdk;
-import io.opentelemetry.sdk.trace.SpanProcessor;
-import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author liurui
@@ -24,13 +16,15 @@ import java.util.concurrent.TimeUnit;
  */
 @Configuration
 public class TraceBean {
-    @Autowired
-    private TraceConfig config;
     @Value("${spring.application.name}")
     private String appName;
 
+    /**
+     * @Description 推荐使用这种方式。<br>
+     * 这种方式的背后提供的是 noop，也就是默认的 provider，会根据启动参数来决定自行构造 所需的 provider。
+     * @return io.opentelemetry.api.OpenTelemetry
+     **/
     @Bean
-    @ConditionalOnBean(TraceConfig.class)
     public OpenTelemetry openTelemetry() {
         return AutoConfiguredOpenTelemetrySdk.builder()
                 .setResultAsGlobal(false)
@@ -38,20 +32,42 @@ public class TraceBean {
                 .getOpenTelemetrySdk();
     }
 
-
-    private SpanProcessor getJaegerGrpcSpanProcessor() {
-        String httpUrl = String.format("http://%s:%s", config.getHost(), config.getPort());
-        System.out.println(httpUrl);
-        OtlpGrpcSpanExporter grpcSpanExporter = OtlpGrpcSpanExporter.builder()
-                .setEndpoint(httpUrl)   //配置.setEndpoint参数时，必须添加https或者http
-                .setTimeout(2, TimeUnit.SECONDS)
-                //.addHeader("header1", "1") // 添加header
-                .build();
-        return BatchSpanProcessor.builder(grpcSpanExporter)
-                .setScheduleDelay(100, TimeUnit.MILLISECONDS)
-                .build();
-    }
-
+    // 这种方式，主要提供了初始 provider 实现来构建一个 OpenTelemetry 实例。
+//    @Bean
+//    @ConditionalOnBean(TraceConfig.class)
+//    public OpenTelemetry openTelemetry() {
+//        SpanProcessor spanProcessor = getJaegerGrpcSpanProcessor();
+//        Resource serviceNameResource = Resource.create(Attributes.of(ResourceAttributes.SERVICE_NAME, appName));
+//
+//        // Set to process the spans by the Zipkin Exporter
+//        SdkTracerProvider tracerProvider =
+//                SdkTracerProvider.builder()
+//                        .addSpanProcessor(spanProcessor)
+//                        .setResource(Resource.getDefault().merge(serviceNameResource))
+//                        .build();
+//        OpenTelemetrySdk openTelemetry =
+//                OpenTelemetrySdk.builder().setTracerProvider(tracerProvider)
+//                        .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
+//                        .buildAndRegisterGlobal();
+//
+//        // add a shutdown hook to shut down the SDK
+//        Runtime.getRuntime().addShutdownHook(new Thread(tracerProvider::close));
+//
+//        // return the configured instance so it can be used for instrumentation.
+//        return openTelemetry;
+//    }
+//    private SpanProcessor getJaegerGrpcSpanProcessor() {
+//        String httpUrl = String.format("http://%s:%s", config.getHost(), config.getPort());
+//        System.out.println(httpUrl);
+//        OtlpGrpcSpanExporter grpcSpanExporter = OtlpGrpcSpanExporter.builder()
+//                .setEndpoint(httpUrl)   //配置.setEndpoint参数时，必须添加https或者http
+//                .setTimeout(2, TimeUnit.SECONDS)
+//                //.addHeader("header1", "1") // 添加header
+//                .build();
+//        return BatchSpanProcessor.builder(grpcSpanExporter)
+//                .setScheduleDelay(100, TimeUnit.MILLISECONDS)
+//                .build();
+//    }
     @Bean
     public Tracer tracer() {
         return openTelemetry().getTracer(appName);

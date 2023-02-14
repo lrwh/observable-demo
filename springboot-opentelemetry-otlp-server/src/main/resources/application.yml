@@ -13,8 +13,4 @@ spring:
     allow-bean-definition-overriding: true
 extra:
   host: localhost
-trace:
-  exporter:
-    host: localhost
-    port: 14250
 client: false
