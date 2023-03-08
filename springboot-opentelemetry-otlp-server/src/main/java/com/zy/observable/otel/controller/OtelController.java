@@ -2,9 +2,12 @@ package com.zy.observable.otel.controller;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.zy.observable.otel.util.ConstantsUtils;
+import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.baggage.Baggage;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.api.metrics.LongCounter;
+import io.opentelemetry.api.metrics.Meter;
 import io.opentelemetry.api.trace.*;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
@@ -15,6 +18,7 @@ import io.opentelemetry.semconv.trace.attributes.SemanticAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -23,10 +27,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.PostConstruct;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Optional;
+import java.util.Random;
+
+import static io.opentelemetry.api.common.AttributeKey.stringKey;
 
 /**
  * @author liurui
@@ -95,7 +103,7 @@ public class OtelController extends BaseController {
         MDC.put(ConstantsUtils.MDC_USER_ID, userId);
         span.addEvent("testEvent");
         Attributes eventAttributes = Attributes.of(
-                AttributeKey.stringKey("key"), "value",
+                stringKey("key"), "value",
                 AttributeKey.longKey("result"), 10L);
         logger.info("traceid : {}",span.getSpanContext().getTraceId());
         // Baggage 用法,此处set
@@ -165,7 +173,7 @@ public class OtelController extends BaseController {
     }
 
     private Attributes atttributes(String id) {
-        return Attributes.of(AttributeKey.stringKey("app.id"), id);
+        return Attributes.of(stringKey("app.id"), id);
     }
 
 //    @GetMapping("/context")
@@ -206,7 +214,7 @@ public class OtelController extends BaseController {
             HttpURLConnection transportLayer = (HttpURLConnection) url.openConnection();
             // Inject the request with the *current*  Context, which contains our current Span.
             setter.set(transportLayer, "contextName", "MyContext");
-            openTelemetry.getPropagators().getTextMapPropagator().inject(Context.current(), transportLayer, setter);
+            GlobalOpenTelemetry.getPropagators().getTextMapPropagator().inject(Context.current(), transportLayer, setter);
             // Make outgoing call
             InputStream is = transportLayer.getInputStream();
             is.close();
@@ -236,7 +244,7 @@ public class OtelController extends BaseController {
             }
         };
         // Extract the SpanContext and other elements from the request.
-        Context extractedContext = openTelemetry.getPropagators().getTextMapPropagator()
+        Context extractedContext = GlobalOpenTelemetry.getPropagators().getTextMapPropagator()
                 .extract(Context.current(), httpExchange, getter);
         try (Scope scope = extractedContext.makeCurrent()) {
             // Automatically use the extracted SpanContext as parent.
@@ -301,5 +309,37 @@ public class OtelController extends BaseController {
 
     private Context withSpanContext(SpanContext spanContext, Context context) {
         return context.with(Span.wrap(spanContext));
+    }
+
+    @Autowired
+    private Meter meter;
+
+    /**
+     * @Description 使用 otel sdk 构造 metric 信息
+     * @Param []
+     * @return void
+     **/
+    @PostConstruct
+    public void customMetrics() {
+        System.out.println("do here.......");
+        meter.gaugeBuilder("connections")
+                .setDescription("当前Socket.io连接数")
+//                .setUnit("1")
+                .buildWithCallback(
+                        result -> {
+                            System.out.println("metrics");
+                            result.record(
+                                    new Random().nextInt(1000),
+                                    Attributes.of(
+                                            stringKey("id"),
+                                            "a1" ));
+//                            for (int i = 1; i < 4; i++) {
+//                                result.record(
+//                                        i,
+//                                        Attributes.of(
+//                                                AttributeKey.stringKey("id"),
+//                                                "a" + i));
+//                            }
+                        });
     }
 }

@@ -18,8 +18,8 @@ public class BaseController {
     public RestTemplate httpTemplate;
     @Autowired
     public Tracer tracer;
-    @Autowired
-    public OpenTelemetry openTelemetry;
+//    @Autowired
+//    public OpenTelemetry openTelemetry;
 
     @Value("${extra.host}")
     public String extraHost;

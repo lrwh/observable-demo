@@ -196,7 +196,7 @@ API定义了一个 Meter 接口。该接口由一组 instrument 构造器，和�
 ```java
     @Bean
     public Meter meter() {
-        return openTelemetry().getMeter(appName);
+        return GlobalOpenTelemetry.getMeter(appName);
     }
 ```
 
@@ -211,9 +211,9 @@ API定义了一个 Meter 接口。该接口由一组 instrument 构造器，和�
 ### 构建 gauge 类型的 metric
 
 ```java
-    @Bean
+    @PostConstruct
     public void customMetrics() {
-        meter().gaugeBuilder("connections")
+        meter.gaugeBuilder("connections")
                 .setDescription("当前Socket.io连接数")
                 .setUnit("1")
                 .buildWithCallback(
