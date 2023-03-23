@@ -1,6 +1,7 @@
 package com.zy.observable.server.controller;
 
 import com.zy.observable.server.bean.AjaxResult;
+import com.zy.observable.server.bean.MyMBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import javax.management.Attribute;
+import javax.management.JMX;
+import javax.management.MBeanServerConnection;
+import javax.management.MalformedObjectNameException;
+import javax.management.ObjectName;
+import java.lang.management.ManagementFactory;
 import java.util.Optional;
 
 /**
@@ -123,6 +130,19 @@ public class ServerController {
         return new AjaxResult(400,"异常测试");
     }
 
+    @GetMapping("/mbean")
+    @ResponseBody
+    public String MBeanMetrac() throws MalformedObjectNameException {
+        // Get reference to MyMBean in MBeanServer
+        MBeanServerConnection mbsc = ManagementFactory.getPlatformMBeanServer();
+        ObjectName name = new ObjectName("com.example:type=MyMBean");
+        MyMBean proxy = JMX.newMBeanProxy(mbsc, name, MyMBean.class);
+
+        // Increase myField property by 1
+        int myField = proxy.getMyField();
+        proxy.setMyField(myField + 1);
+        return "ok";
+    }
 
     private String result() {
         return client ? "【已开启】客户端请求" : "【已关闭】客户端请求";
