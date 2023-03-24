@@ -2,6 +2,7 @@ package com.zy.observable.server.controller;
 
 import com.zy.observable.server.bean.AjaxResult;
 import com.zy.observable.server.bean.MyMBean;
+import com.zy.observable.server.ibean.MyMBeanProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,13 +136,14 @@ public class ServerController {
     public String MBeanMetrac() throws MalformedObjectNameException {
         // Get reference to MyMBean in MBeanServer
         MBeanServerConnection mbsc = ManagementFactory.getPlatformMBeanServer();
-        ObjectName name = new ObjectName("com.example:type=MyMBean");
-        MyMBean proxy = JMX.newMBeanProxy(mbsc, name, MyMBean.class);
+        ObjectName name = new ObjectName("com.zy.observable.server.bean:type=MyMBean");
+        MyMBeanProxy proxy = JMX.newMBeanProxy(mbsc, name, MyMBeanProxy.class);
 
         // Increase myField property by 1
-        int myField = proxy.getMyField();
-        proxy.setMyField(myField + 1);
-        return "ok";
+        int myField = proxy.getmyField();
+        logger.info("每次运行会+1 当前值是"+myField);
+        proxy.setmyField(myField + 1);
+        return "mbean 增加一次";
     }
 
     private String result() {

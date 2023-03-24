@@ -22,3 +22,22 @@ DynamicMBean 接口还需要实现 invoke 方法。invoke 方法用于调用 MBe
 1. 通过 MBeanServerConnection 接口获取对 MBean 的引用。
 1. 使用 getAttribute 方法获取属性的当前值，并使用 setAttribute 方法将其设置为新值。
 1. 在 JMX 管理界面中查看属性的新值。
+
+## 开启 jmx 端口并通过管理界面查看
+开启端口参数：
+```shell
+songlq@songlq-PC:~/github/observable-demo/springboot-server$ java -Dcom.sun.management.jmxremote.host=127.0.0.1  \
+ -Dcom.sun.manaagement.jmxremote.port=9012 \
+ -Dcom.sun.management.jmxremote.ssl=false \
+ -Dcom.sun.management.jmxremote.authenticate=false \
+ -jar target/springboot-server.jar
+ 
+# 查看
+songlq@songlq-PC:~/github/observable-demo/springboot-server$ jconsole 
+
+#访问浏览器或者curl
+curl http://localhost:8080/mbean
+```
+这时候 可视化界面上的 `Mbean` 中就可以看到 `com.zy.observable.server.bean`
+
+## 接入 jmxfetch 或者 ddtrace

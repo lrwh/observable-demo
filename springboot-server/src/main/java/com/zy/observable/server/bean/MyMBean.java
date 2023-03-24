@@ -1,9 +1,11 @@
 package com.zy.observable.server.bean;
 
+import com.zy.observable.server.ibean.MyMBeanProxy;
+
 import javax.management.*;
 import java.lang.management.*;
 
-public class MyMBean implements DynamicMBean {
+public class MyMBean implements DynamicMBean, MyMBeanProxy {
     private int myField;
 
     public MyMBean(int myField) {
@@ -71,11 +73,11 @@ public class MyMBean implements DynamicMBean {
         }
     }
 
-    public int getMyField() {
+    public int getmyField() {
         return myField;
     }
 
-    public void setMyField(int i) {
+    public void setmyField(int i) {
         myField = i;
     }
 }

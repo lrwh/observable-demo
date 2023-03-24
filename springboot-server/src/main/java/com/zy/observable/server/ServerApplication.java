@@ -28,5 +28,4 @@ public class ServerApplication {
     public RestTemplate httpTemplate(){
         return new RestTemplate();
     }
-
 }
