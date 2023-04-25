@@ -1,0 +1,18 @@
+server:
+  port: 8180
+management:
+  server:
+    port: 8091
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      env: ${spring.profiles.active}
+spring:
+  application:
+    name: demo
+  profiles:
+    active: dev

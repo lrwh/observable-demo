@@ -38,6 +38,7 @@
 ├── springboot-opentelemetry-otlp-server -------- 介绍 opentelemetry 的 otlpExporter 用法（基于Springboot分布式应用服务端）
 ├── springboot-opentracing-jaeger --------------- 介绍 jaeger 用法（基于springboot 应用）
 └── springboot-server --------------------------- Springboot 服务端，结合客户端一起使用，方便查看分布式应用链路情况
+└── springboot-threadpool ----------------------- 线程池监控
 ```
 
 ## 致谢
