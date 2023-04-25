@@ -328,18 +328,18 @@ public class OtelController extends BaseController {
                 .buildWithCallback(
                         result -> {
                             System.out.println("metrics");
-                            result.record(
-                                    new Random().nextInt(1000),
-                                    Attributes.of(
-                                            stringKey("id"),
-                                            "a1" ));
-//                            for (int i = 1; i < 4; i++) {
-//                                result.record(
-//                                        i,
-//                                        Attributes.of(
-//                                                AttributeKey.stringKey("id"),
-//                                                "a" + i));
-//                            }
+//                            result.record(
+//                                    new Random().nextInt(1000),
+//                                    Attributes.of(
+//                                            stringKey("id"),
+//                                            "a1" ));
+                            for (int i = 1; i < 4; i++) {
+                                result.record(
+                                        new Random().nextInt(1000),
+                                        Attributes.of(
+                                                AttributeKey.stringKey("id"),
+                                                "a" + i));
+                            }
                         });
     }
 }
