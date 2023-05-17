@@ -4,7 +4,7 @@
     <springProperty scope="context" name="logName" source="spring.application.name" defaultValue="localhost.log"/>
     <!-- 配置后可以动态修改日志级别-->
     <jmxConfigurator />
-    <property name="log.pattern" value="%d{HH:mm:ss} [%thread] %-5level %logger{10} [traceId=%X{trace_id} spanId=%X{span_id} userId=%X{user-id}] %msg%n" />
+    <property name="log.pattern" value="%d{HH:mm:ss} [%thread] %-5level %logger{10} [traceId=%X{dd.trace_id} spanId=%X{dd.span_id} userId=%X{user-id}] %msg%n" />
 
     <!-- %m输出的信息,%p日志级别,%t线程名,%d日期,%c类的全名,,,, -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
