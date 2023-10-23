@@ -2,17 +2,16 @@ package com.zy.observable.ddtrace.controller;
 
 import com.zy.observable.ddtrace.service.TestService;
 import com.zy.observable.ddtrace.util.ConstantsUtils;
-import datadog.trace.api.DDId;
-import datadog.trace.api.DDTags;
+import com.zy.observable.ddtrace.util.InheritableThreadLocalUtil;
+import com.zy.observable.ddtrace.util.ThreadLocalUtil;
+import datadog.trace.api.DDTraceId;
 import datadog.trace.api.IdGenerationStrategy;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
-import io.opentracing.log.Fields;
 import io.opentracing.propagation.Format;
 import io.opentracing.propagation.TextMapAdapter;
-import io.opentracing.tag.Tags;
 import io.opentracing.util.GlobalTracer;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -29,12 +28,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author liurui
@@ -80,7 +78,31 @@ public class IndexController extends BaseController {
             inject();
         }
         httpTemplate.getForEntity(apiUrl + "/resource", String.class).getBody();
-        httpTemplate.getForEntity(apiUrl + "/auth", String.class).getBody();
+
+        InheritableThreadLocalUtil.setValue(GlobalTracer.get().activeSpan());
+
+        logger.info("current traceiD:{}",InheritableThreadLocalUtil.getValue().context().toTraceId());
+
+
+        new Thread(()->{
+            logger.info("thread:{}",InheritableThreadLocalUtil.getValue().context().toTraceId());
+            Span span = null;
+            try {
+                Tracer tracer = GlobalTracer.get();
+                span = tracer.buildSpan("thread")
+                        .asChildOf(InheritableThreadLocalUtil.getValue())
+                        .start();
+                span.setTag("threadName", Thread.currentThread().getName());
+                logger.info("thread:{}",span.context().toTraceId());
+                GlobalTracer.get().activateSpan(span);
+                httpTemplate.getForEntity(apiUrl + "/auth", String.class).getBody();
+            }finally {
+                if (span!=null) {
+                    span.finish();
+                }
+            }
+        }).start();
+
         try {
             if (client) {
                 httpTemplate.getForEntity("http://" + extraHost + ":8081/client", String.class).getBody();
@@ -123,8 +145,8 @@ public class IndexController extends BaseController {
     @ResponseBody
     public String customTrace(String traceId, String parentId, Integer treeLength) {
         Tracer tracer = GlobalTracer.get();
-        traceId = StringUtils.isEmpty(traceId) ? IdGenerationStrategy.RANDOM.generate().toString() : traceId;
-        parentId = StringUtils.isEmpty(parentId) ? DDId.ZERO.toString() : parentId;
+        traceId = StringUtils.isEmpty(traceId) ? IdGenerationStrategy.fromName("RANDOM").toString() : traceId;
+        parentId = StringUtils.isEmpty(parentId) ? DDTraceId.ZERO.toString() : parentId;
         treeLength = treeLength == null ? 3 : treeLength;
         System.out.println(traceId + "\t" + parentId);
         for (int i = 0; i < treeLength; i++) {
@@ -213,7 +235,10 @@ public class IndexController extends BaseController {
         }catch (Exception e){
             if (StringUtils.isNotBlank(sign) && sign.equalsIgnoreCase("trace")){
                 buildErrorTrace(e);
+            }else{
+                throw e;
             }
+
         }
         return "200";
     }
@@ -235,5 +260,56 @@ public class IndexController extends BaseController {
             serverSpan.finish();
         }
         return "buildSpan success";
+    }
+
+    /**
+     * 调整API 接口
+     * @param apiUrl
+     * @return
+     */
+    @GetMapping("/setApi")
+    @ResponseBody
+    public String setApiUrl(String apiUrl) {
+        this.apiUrl = apiUrl;
+        return apiUrl;
+    }
+
+    @RequestMapping("/thread")
+    @ResponseBody
+    public String threadTest(){
+        logger.info("this func is threadTest.");
+        InheritableThreadLocalUtil.setValue(GlobalTracer.get().activeSpan());
+        logger.info("current traceId:{}",GlobalTracer.get().activeSpan().context().toTraceId());
+
+        new Thread(()->{
+            Span span = null;
+            try {
+                Tracer tracer = GlobalTracer.get();
+                span = tracer.buildSpan("thread")
+                        .asChildOf(InheritableThreadLocalUtil.getValue())
+                        .start();
+                span.setTag("threadName", Thread.currentThread().getName());
+                GlobalTracer.get().activateSpan(span);
+                logger.info("this is new Thread.");
+                logger.info("new Thread get span:{}",InheritableThreadLocalUtil.getValue());
+                logger.info("thread:{}",span.context().toTraceId());
+            }finally {
+                if (span!=null) {
+                    span.finish();
+                }
+            }
+        }).start();
+        return "success";
+    }
+
+    @RequestMapping("/execThread")
+    @ResponseBody
+    public String ExecutorServiceTest(){
+        ExecutorService executor = Executors.newCachedThreadPool();
+        logger.info("this func is ExecutorServiceTest.");
+        executor.submit(()->{
+            logger.info("this is executor Thread.");
+        });
+        return "ExecutorService";
     }
 }

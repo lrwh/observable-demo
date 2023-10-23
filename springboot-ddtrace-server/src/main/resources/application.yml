@@ -16,6 +16,6 @@ extra:
 client: false
 
 #logging:
-#  config: classpath:log4j2.xml
+#  config: classpath:log4j2-1.xml
 profiling:
   file: /opt/profiling/profiling.txt

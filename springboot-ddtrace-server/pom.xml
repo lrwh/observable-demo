@@ -11,6 +11,7 @@
     <groupId>com.zy.observable</groupId>
     <artifactId>springboot-ddtrace-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
     <name>springboot-ddtrace-server</name>
     <description>Demo project for Spring Boot</description>
     <properties>
@@ -18,7 +19,7 @@
         <grpc.version>1.36.1</grpc.version>
 <!--        <dd.version>0.102.0</dd.version>-->
 <!--        <dd.version>0.98.1</dd.version>-->
-        <dd.version>0.114.0</dd.version>
+        <dd.version>1.21.0</dd.version>
     </properties>
     <dependencies>
         <dependency>
@@ -26,29 +27,34 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <!-- 移除logback，改用log4j2-->
             <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
+<!--                <exclusion>-->
+<!--                    <groupId>org.springframework.boot</groupId>-->
+<!--                    <artifactId>spring-boot-starter-logging</artifactId>-->
+<!--                </exclusion>-->
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-log4j2</artifactId>
+                    </exclusion>
             </exclusions>
         </dependency>
 
         <!-- 新增log4j2依赖 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-log4j2</artifactId>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ch.qos.logback</groupId>-->
+<!--            <artifactId>logback-core</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>

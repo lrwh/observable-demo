@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="WARN">
+    <appenders>
+        <!--  输出控制台的配置 -->
+        <Console name="console" target="SYSTEM_OUT">
+            <!--  控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--  这个都知道是输出日志的格式 -->
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class %L %M trace_id=%mdc{dd.trace_id} span_id=%mdc{dd.span_id} - %msg%xEx%n"/>
+        </Console>
+
+        <!--配置自定义日志，按天输出-->
+        <RollingFile name="weather" fileName="log/weather.log" filePattern="/log/weather-%d{yyyy-MM-dd}.log" >
+            <PatternLayout pattern="%d{yyyy.MM.dd HH:mm:ss.SSS} %-5level %class{36} %L %M trace_id=%mdc{dd.trace_id} span_id=%mdc{dd.span_id} - %msg%xEx%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
+        <!-- 把系统所有的error全部打到这个文件里  -->
+        <File name="error" fileName="log/error.log">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{yyyy.MM.dd HH:mm:ss z} %-5level %class %L %M trace_id=%mdc{dd.trace_id} span_id=%mdc{dd.span_id} - %msg%xEx%n"/>
+        </File>
+
+    </appenders>
+
+    <!-- 然后定义logger，只有定义了logger并引入的appender，appender才会生效 -->
+    <loggers>
+        <!--过滤掉spring和mybatis的一些无用的DEBUG信息-->
+        <logger name="org.springframework" level="ERROR"></logger>
+        <logger name="org.mybatis" level="ERROR"></logger>
+        <logger name="org.hibernate" level="ERROR"></logger>
+
+        <logger name="org.datadog" level="debug" />
+<!--        <logger name="datadog" level="debug" />-->
+
+
+        <root level="debug">
+            <appender-ref ref="console"/>
+            <appender-ref ref="error" />
+        </root>
+
+        <!-- additivity="true" 的意思是会在控制台也输入一份-->
+        <logger name="weather" level="info" additivity="true">
+            <appender-ref ref="weather"/>
+        </logger>
+
+    </loggers>
+</configuration>

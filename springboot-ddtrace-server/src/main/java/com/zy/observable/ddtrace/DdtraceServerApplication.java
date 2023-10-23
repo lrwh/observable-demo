@@ -1,6 +1,6 @@
 package com.zy.observable.ddtrace;
 
-import datadog.trace.api.DDId;
+import datadog.trace.api.DDTraceId;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
@@ -23,9 +23,9 @@ public class DdtraceServerApplication {
     }
 
     private static void b3TraceByMultiple(){
-        String traceId = DDId.from("6917954032704516265").toHexStringOrOriginal();
+        String traceId = DDTraceId.from("6917954032704516265").toHexString();
         Tracer tracer = GlobalTracer.get();
-        String parentId = DDId.from("4025816492133344807").toHexStringOrOriginal();
+        String parentId = DDTraceId.from("4025816492133344807").toHexString();
         for (int i = 0; i < 3; i++) {
             Map<String, String> data = new HashMap<>();
 //            data.put("x-datadog-trace-id", traceId);
@@ -45,15 +45,15 @@ public class DdtraceServerApplication {
             serverSpan.setTag("code","200");
             tracer.activateSpan(serverSpan).close();
             serverSpan.finish();
-            parentId = DDId.from(serverSpan.context().toSpanId()).toHexStringOrOriginal();
+            parentId = DDTraceId.from(serverSpan.context().toSpanId()).toHexString();
             System.out.println( traceId+"\t"+serverSpan.context().toTraceId()+"\t"+parentId);
         }
 
     }
     private static void b3TraceBySingle(){
-        String traceId = DDId.from("6917954032704516265").toHexStringOrOriginal();
+        String traceId = DDTraceId.from("6917954032704516265").toHexString();
         Tracer tracer = GlobalTracer.get();
-        String parentId = DDId.from("4025816492133344807").toHexStringOrOriginal();
+        String parentId = DDTraceId.from("4025816492133344807").toHexString();
         for (int i = 0; i < 3; i++) {
             String b3 = traceId+ "-"+parentId+"-1";
             Map<String, String> data = new HashMap<>();
@@ -66,7 +66,7 @@ public class DdtraceServerApplication {
             serverSpan.setTag("code","200");
             tracer.activateSpan(serverSpan).close();
             serverSpan.finish();
-            parentId = DDId.from(serverSpan.context().toSpanId()).toHexStringOrOriginal();
+            parentId = DDTraceId.from(serverSpan.context().toSpanId()).toHexString();
             System.out.println( traceId+"\t"+serverSpan.context().toTraceId()+"\t"+parentId);
             System.out.println("b3="+b3);
         }
