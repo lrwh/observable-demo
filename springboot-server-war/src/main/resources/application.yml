@@ -1,0 +1,20 @@
+server:
+  port: 8080
+  compression:
+    enabled: true
+api:
+  url: http://localhost:${server.port}
+spring:
+  application:
+    name: server
+  mvc:
+    view:
+      prefix: /
+      suffix: .html
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: dev
+extra:
+  host: localhost
+client: false

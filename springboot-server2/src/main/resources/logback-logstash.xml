@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+    <!-- 部分参数需要来源于properties文件 -->
+    <springProperty scope="context" name="logName" source="spring.application.name" defaultValue="localhost.log"/>
+    <!-- 配置后可以动态修改日志级别-->
+    <jmxConfigurator />
+    <property name="log.pattern" value="%d{HH:mm:ss} [%thread] %-5level %logger{10} [traceId=%X{trace_id} spanId=%X{span_id} userId=%X{user-id}] %msg%n" />
+
+    <springProperty scope="context" name="logstashHost" source="logstash.host" defaultValue="logstash"/>
+    <springProperty scope="context" name="logstashPort" source="logstash.port" defaultValue="4560"/>
+    <!-- %m输出的信息,%p日志级别,%t线程名,%d日期,%c类的全名,,,, -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 日志输出编码 -->
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>UTC+8</timeZone>
+                </timestamp>
+                <pattern>
+                    <pattern>
+                        {
+                        "podName":"${podName:-}",
+                        "namespace":"${k8sNamespace:-}",
+                        "severity": "%level",
+                        "serverName": "${logName:-}",
+                        "traceId": "%X{trace_id:-}",
+                        "spanId": "%X{span_id:-}",
+                        "pid": "${PID:-}",
+                        "thread": "%thread",
+                        "class": "%logger{40}",
+                        "message": "%message\n%exception"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/${logName}/${logName}.log</file>    <!-- 使用方法 -->
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/${logName}/${logName}-%d{yyyy-MM-dd}.log.%i</fileNamePattern>
+            <maxFileSize>64MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- LOGSTASH输出设置 -->
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <!-- 配置logStash 服务地址 -->
+        <destination>${logstashHost}:${logstashPort}</destination>
+        <!-- 日志输出编码 -->
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>UTC+8</timeZone>
+                </timestamp>
+                <pattern>
+                    <pattern>
+                        {
+                        "podName":"${podName:-}",
+                        "namespace":"${k8sNamespace:-}",
+                        "severity": "%level",
+                        "serverName": "${logName:-}",
+                        "traceId": "%X{trace_id:-}",
+                        "spanId": "%X{span_id:-}",
+                        "pid": "${PID:-}",
+                        "thread": "%thread",
+                        "class": "%logger{40}",
+                        "message": "%message\n%exception"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+        <!-- 保活 -->
+        <keepAliveDuration>5 minutes</keepAliveDuration>
+    </appender>
+
+    <!-- 只打印error级别的内容 -->
+    <logger name="net.sf.json" level="ERROR" />
+    <logger name="org.springframework" level="ERROR" />
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+<!--        <appender-ref ref="LOGSTASH"/>-->
+    </root>
+</configuration>

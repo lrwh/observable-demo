@@ -296,6 +296,7 @@ public class IndexController extends BaseController {
             }finally {
                 if (span!=null) {
                     span.finish();
+                    logger.info("span finish.");
                 }
             }
         }).start();

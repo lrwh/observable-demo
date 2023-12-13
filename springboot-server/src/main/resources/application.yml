@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8090
   compression:
     enabled: true
 api:
@@ -18,3 +18,8 @@ spring:
 extra:
   host: localhost
 client: false
+
+#logging:
+#  config: classpath:log4j2.xml
+profiling:
+  file: /opt/profiling/profiling.txt

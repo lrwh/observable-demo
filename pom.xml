@@ -48,7 +48,9 @@
         <module>springboot-opentelemetry-otlp-server</module>
         <module>springboot-opentelemetry-otlp-client</module>
         <module>springboot-ddtrace-server</module>
+        <module>springboot-server-war</module>
         <module>springboot-server</module>
+        <module>springboot-server2</module>
         <module>springboot-client</module>
         <module>profiling</module>
         <module>springboot-threadpool</module>

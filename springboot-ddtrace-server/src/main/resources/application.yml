@@ -1,5 +1,7 @@
 server:
   port: 8086
+#  servlet:
+#    context-path: /springboot-server
 api:
   url: http://localhost:${server.port}
 spring:
@@ -13,7 +15,7 @@ spring:
     allow-bean-definition-overriding: true
 extra:
   host: localhost
-client: false
+client: true
 
 #logging:
 #  config: classpath:log4j2-1.xml

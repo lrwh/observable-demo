@@ -11,7 +11,7 @@
     <groupId>com.zy.observable</groupId>
     <artifactId>springboot-ddtrace-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>springboot-ddtrace-server</name>
     <description>Demo project for Spring Boot</description>
     <properties>

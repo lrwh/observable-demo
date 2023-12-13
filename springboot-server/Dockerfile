@@ -7,7 +7,7 @@ WORKDIR /data
 RUN mkdir logs
 # 这个目录自行修改
 ADD springboot-server.jar app.jar
-ADD ../opentelemetry-javaagent/opentelemetry-javaagent-1.13.1.jar /opentelemetry-javaagent.jar
+ADD ../opentelemetry-javaagent/opentelemetry-javaagent-1.26.1-guance.jar /opentelemetry-javaagent.jar
 # 修改时区
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone

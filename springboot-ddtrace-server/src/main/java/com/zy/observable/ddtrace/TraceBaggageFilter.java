@@ -29,6 +29,7 @@ public class TraceBaggageFilter implements Filter {
         final Span span = GlobalTracer.get().activeSpan();
         if (span != null) {
             HttpServletRequest request = (HttpServletRequest)servletRequest;
+            System.out.println(request.getRequestURI());
             Enumeration<String> headerNames = request.getHeaderNames();
             while (headerNames.hasMoreElements()) {
                 final String header = headerNames.nextElement();

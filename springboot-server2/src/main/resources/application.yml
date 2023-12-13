@@ -1,0 +1,25 @@
+server:
+  port: 8090
+  compression:
+    enabled: true
+api:
+  url: http://localhost:${server.port}
+spring:
+  application:
+    name: server
+  mvc:
+    view:
+      prefix: /
+      suffix: .html
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: dev
+extra:
+  host: localhost
+client: false
+
+#logging:
+#  config: classpath:log4j2.xml
+profiling:
+  file: /opt/profiling/profiling.txt
