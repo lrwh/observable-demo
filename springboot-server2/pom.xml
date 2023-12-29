@@ -42,44 +42,44 @@
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
-<!--            <plugin>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--            </plugin>-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <!-- lib依赖包输出目录，打包的时候不打进jar包里 -->
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                            <excludeTransitive>false</excludeTransitive>
-                            <stripVersion>false</stripVersion>
-                            <includeScope>runtime</includeScope>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- 压缩jar包，打出来的jar中没有了lib文件夹 -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <layout>ZIP</layout>
-                    <includes>
-                        <include>
-                            <groupId>nothing</groupId>
-                            <artifactId>nothing</artifactId>
-                        </include>
-                    </includes>
-                </configuration>
             </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-dependency-plugin</artifactId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>copy-dependencies</id>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>copy-dependencies</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            &lt;!&ndash; lib依赖包输出目录，打包的时候不打进jar包里 &ndash;&gt;-->
+<!--                            <outputDirectory>${project.build.directory}/lib</outputDirectory>-->
+<!--                            <excludeTransitive>false</excludeTransitive>-->
+<!--                            <stripVersion>false</stripVersion>-->
+<!--                            <includeScope>runtime</includeScope>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+<!--            &lt;!&ndash; 压缩jar包，打出来的jar中没有了lib文件夹 &ndash;&gt;-->
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <layout>ZIP</layout>-->
+<!--                    <includes>-->
+<!--                        <include>-->
+<!--                            <groupId>nothing</groupId>-->
+<!--                            <artifactId>nothing</artifactId>-->
+<!--                        </include>-->
+<!--                    </includes>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 
