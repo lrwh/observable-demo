@@ -1,6 +1,7 @@
 package com.zy.observable.server.controller;
 
 import com.zy.observable.server.bean.AjaxResult;
+import com.zy.observable.server.service.TestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,15 @@ public class ServerController {
     @Value("${sleep:0}")
     public Long sleep;
 
+    @Autowired
+    private TestService testService;
+
+    @GetMapping("/user")
+    @ResponseBody
+    public String getUser(){
+        logger.info("do getUser");
+        return testService.users();
+    }
     @GetMapping("/")
     public String index() {
         return "index";
@@ -100,6 +110,7 @@ public class ServerController {
     @RequestMapping("/getClient")
     @ResponseBody
     public String getClient() {
+        sleep();
         return result();
     }
 
@@ -123,7 +134,13 @@ public class ServerController {
         return new AjaxResult(400,"异常测试");
     }
 
-
+    @GetMapping("/npe")
+    @ResponseBody
+    public AjaxResult npe(){
+        String a = null;
+        System.out.println(a.toString());
+        return AjaxResult.success();
+    }
     private String result() {
         return client ? "【已开启】客户端请求" : "【已关闭】客户端请求";
     }
