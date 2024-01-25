@@ -1,16 +1,15 @@
 package com.zy.observable.server.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zy.observable.server.bean.AjaxResult;
 import com.zy.observable.server.service.TestService;
+import com.zy.observable.server.vo.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
@@ -141,6 +140,21 @@ public class ServerController {
         System.out.println(a.toString());
         return AjaxResult.success();
     }
+
+    @PostMapping("/student")
+    @ResponseBody
+    public String addStudent(@RequestBody Student student){
+        logger.info("add student:{}", JSONObject.toJSONString(student));
+        return JSONObject.toJSONString(student);
+    }
+    @PostMapping("/jsonStr")
+    @ResponseBody
+    public String addJsonStr(@RequestBody String jsonStr){
+        logger.info("add jsonStr:{}", jsonStr);
+        return jsonStr;
+    }
+
+
     private String result() {
         return client ? "【已开启】客户端请求" : "【已关闭】客户端请求";
     }
