@@ -55,7 +55,7 @@ public class ServerController {
 //    @GetMapping("/gateway")
     @RequestMapping("/gateway")
     @ResponseBody
-    public AjaxResult gateway(String tag) {
+    public AjaxResult gateway(String tag,String name) {
         logger.info("this is tag");
         sleep();
         httpTemplate.getForEntity(apiUrl + "/resource", String.class).getBody();
@@ -67,7 +67,8 @@ public class ServerController {
                 return AjaxResult.error("client 调用失败");
             }
         }
-        return httpTemplate.getForEntity(apiUrl + "/billing?tag=" + tag, AjaxResult.class).getBody();
+        httpTemplate.getForEntity(apiUrl + "/billing?tag=" + tag, AjaxResult.class).getBody();
+        return AjaxResult.success("支付成功");
     }
 
     @RequestMapping("/resource")

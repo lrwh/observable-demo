@@ -3,7 +3,7 @@
     <springProperty scope="context" name="LOG_HOME" source="logback.home"/>
     <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] %X{dd.service} %X{dd.trace_id} %X{dd.span_id} - %msg%n" />
 <!--    <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] [traceId=%X{trace_id} spanId=%X{span_id}] - %msg%n" />-->
-
+    <springProperty scope="context" name="logName" source="spring.application.name" defaultValue="Springboot"/>
     <!-- %m输出的信息,%p日志级别,%t线程名,%d日期,%c类的全名,,,, -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -30,8 +30,7 @@
     <!-- 只打印error级别的内容 -->
     <logger name="net.sf.json" level="ERROR" />
     <logger name="org.springframework" level="ERROR" />
-
-
+<!--    <logger name="io.opentelemetry" level="DEBUG" />-->
     <root level="info">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
