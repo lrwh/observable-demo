@@ -3,7 +3,6 @@ package com.zy.observable.ddtrace.controller;
 import com.zy.observable.ddtrace.service.TestService;
 import com.zy.observable.ddtrace.util.ConstantsUtils;
 import com.zy.observable.ddtrace.util.InheritableThreadLocalUtil;
-import com.zy.observable.ddtrace.util.ThreadLocalUtil;
 import datadog.trace.api.DDTraceId;
 import datadog.trace.api.IdGenerationStrategy;
 import io.opentracing.Scope;
@@ -14,6 +13,7 @@ import io.opentracing.propagation.Format;
 import io.opentracing.propagation.TextMapAdapter;
 import io.opentracing.util.GlobalTracer;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.skywalking.apm.toolkit.trace.RunnableWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -73,7 +73,6 @@ public class IndexController extends BaseController {
         sleep();
         testService.getDemo();
         testService.apiTrace();
-
         if (injectSwitch) {
             inject();
         }
@@ -110,6 +109,7 @@ public class IndexController extends BaseController {
         } catch (Exception e) {
             buildErrorTrace(e);
         }
+        InheritableThreadLocalUtil.remove();
         return httpTemplate.getForEntity(apiUrl + "/billing?tag=" + tag, String.class).getBody();
     }
 
@@ -144,6 +144,9 @@ public class IndexController extends BaseController {
     @GetMapping("/customTrace")
     @ResponseBody
     public String customTrace(String traceId, String parentId, Integer treeLength) {
+        //x-datadog-trace-id			123456789
+        //x-datadog-parent-id			3784523368376145472
+        // curl http://localhost:8086/customTrace?traceId=123456789&parentId=3784523368376145472
         Tracer tracer = GlobalTracer.get();
         traceId = StringUtils.isEmpty(traceId) ? IdGenerationStrategy.fromName("RANDOM").toString() : traceId;
         parentId = StringUtils.isEmpty(parentId) ? DDTraceId.ZERO.toString() : parentId;
@@ -151,23 +154,32 @@ public class IndexController extends BaseController {
         System.out.println(traceId + "\t" + parentId);
         for (int i = 0; i < treeLength; i++) {
             Map<String, String> data = new HashMap<>();
-            data.put("X-B3-TraceId", traceId);
-            data.put("X-B3-SpanId", parentId);
-//            data.put("x-datadog-trace-id", traceId);
-//            data.put("x-datadog-parent-id", parentId);
-            SpanContext extractedContext = tracer.extract(Format.Builtin.HTTP_HEADERS, new TextMapAdapter(data));
+//            data.put("X-B3-TraceId", traceId);
+//            data.put("X-B3-SpanId", parentId);
+//            data.put("traceparent","00-1234567-9876543-01");
+            data.put("x-datadog-trace-id", traceId);
+            data.put("x-datadog-parent-id", parentId);
+            SpanContext extractedContext = tracer.extract(Format.Builtin.TEXT_MAP, new TextMapAdapter(data));
             Span serverSpan = tracer.buildSpan("opt" + i)
                     .withTag("service_name", "someService" + i)
                     .asChildOf(extractedContext)
                     .start();
-            tracer.activateSpan(serverSpan).close();
+            Scope scope = tracer.activateSpan(serverSpan);
+
+//            tracer.inject(serverSpan.context(), Format.Builtin.TEXT_MAP,
+//                    new TextMapAdapter(data));
+            // 业务代码
+            buildSpan();
+            httpTemplate.getForEntity(apiUrl + "/billing?tag=customTrace" , String.class).getBody();
+            scope.close();
             serverSpan.finish();
             parentId = serverSpan.context().toSpanId();
             System.out.println(traceId + "\t" + serverSpan.context().toTraceId() + "\t" + parentId);
+
+
         }
         return "build success!";
     }
-
     @GetMapping("/resource")
     @ResponseBody
     public String resource() {
@@ -250,9 +262,10 @@ public class IndexController extends BaseController {
         Tracer tracer = GlobalTracer.get();
         // 获取当前 span
         final Span span = GlobalTracer.get().activeSpan();
+        System.out.println(span.context().toTraceId());
         // 创建三个子span
         for (int i = 0; i <3 ; i++) {
-            Span serverSpan = tracer.buildSpan("spanName" + i) // 配置span的名称
+            Span serverSpan = tracer.buildSpan("spanName") // 配置span的名称
                     .withTag("service_name", "someService" + i) // 配置span tag
                     .asChildOf(span) // 设置span的 父span
                     .start(); // 开启一个span
@@ -298,6 +311,7 @@ public class IndexController extends BaseController {
                     span.finish();
                     logger.info("span finish.");
                 }
+                InheritableThreadLocalUtil.remove();
             }
         }).start();
         return "success";

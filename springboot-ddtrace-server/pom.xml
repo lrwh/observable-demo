@@ -19,7 +19,7 @@
         <grpc.version>1.36.1</grpc.version>
 <!--        <dd.version>0.102.0</dd.version>-->
 <!--        <dd.version>0.98.1</dd.version>-->
-        <dd.version>1.21.0</dd.version>
+        <dd.version>1.30.1</dd.version>
     </properties>
     <dependencies>
         <dependency>
