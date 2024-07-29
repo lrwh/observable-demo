@@ -1,2 +1,4 @@
 logging:
   config: classpath:logback-dev.xml
+#  config: classpath:log4j2.xml
+#  config: classpath:log4j2_async.xml

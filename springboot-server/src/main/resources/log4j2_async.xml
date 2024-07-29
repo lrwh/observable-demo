@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+
+    <Properties>
+        <Property name="Pattern">%-d{yyyy-MM-dd HH:mm:ss.SSS}|%t:%r|%X{TRACE_ID}|%-5p|%c-%M:%L|%m%throwable{full}{separator($)}|%X{dd.service}|%X{dd.env}|%X{dd.trace_id}|%X{dd.span_id}%n
+        </Property>
+        <!--        <Property name="Pattern">%-d{yyyy-MM-dd HH:mm:ss.SSS}|%t:%r|%-5p|%c|%m%n%throwable{full}</Property>-->
+        <Property name="AccessLogPattern">%-d{yyyy-MM-dd HH:mm:ss.SSS}|@|%t:%r|@|%-5p|@|%c|@|%m%n%throwable{full}|%X{dd.service}|%X{dd.env}|%X{dd.trace_id}|%X{dd.span_id}</Property>
+
+        <!--        <Property name="Pattern">%-d{yyyy-MM-dd HH:mm:ss.SSS}|%t:%r|%X{TRACE_ID}|%-5p|%c-%M:%L|%m%n%throwable{full}</Property>-->
+        <Property name="baseDir">logs</Property>
+    </Properties>
+    <Appenders>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--输出日志的格式:
+                1.不设置默认为: %m%n
+                2.disableAnsi="false" noConsoleNoAnsi="false" 配置开启支持%highlight彩色日志
+            -->
+            <PatternLayout pattern="${Pattern}" disableAnsi="false" noConsoleNoAnsi="false"/>
+            <!--只输出level及其以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+        </Console>
+
+<!--        <RollingRandomAccessFile name="stdout" fileName="logs/stdout.log"-->
+<!--                                 filePattern="logs/stdout.log.%d.%i" immediateFlush="false">-->
+<!--            <PatternLayout pattern="${Pattern}" charset="UTF-8"/>-->
+
+<!--            <Policies>-->
+<!--                <SizeBasedTriggeringPolicy size="100 MB"/>-->
+<!--            </Policies>-->
+
+<!--            <DefaultRolloverStrategy max="200">-->
+<!--                <Delete basePath="${baseDir}" maxDepth="1">-->
+<!--                    <IfFileName glob="stdout.log.*"/>-->
+<!--                    <IfLastModified age="7d"/>-->
+<!--                </Delete>-->
+<!--            </DefaultRolloverStrategy>-->
+<!--        </RollingRandomAccessFile>-->
+
+<!--        <RollingRandomAccessFile name="bon_gateway_data_normal" fileName="logs/bon_gateway_data_normal.log"-->
+<!--                                 filePattern="logs/bon_gateway_data_normal.log.%d.%i" immediateFlush="false">-->
+<!--            <PatternLayout pattern="${Pattern}" charset="UTF-8"/>-->
+
+<!--            <Policies>-->
+<!--                <SizeBasedTriggeringPolicy size="100 MB"/>-->
+<!--            </Policies>-->
+
+<!--            <DefaultRolloverStrategy max="200">-->
+<!--                <Delete basePath="${baseDir}" maxDepth="1">-->
+<!--                    <IfFileName glob="bon_gateway_data_normal.log.*"/>-->
+<!--                    <IfLastModified age="7d"/>-->
+<!--                </Delete>-->
+<!--            </DefaultRolloverStrategy>-->
+<!--        </RollingRandomAccessFile>-->
+
+<!--        <RollingRandomAccessFile name="bon_gateway_access_normal" fileName="logs/bon_gateway_access_normal.log"-->
+<!--                                 filePattern="logs/bon_gateway_access_normal.log.%d.%i" immediateFlush="false">-->
+<!--            <PatternLayout pattern="${AccessLogPattern}" charset="UTF-8"/>-->
+<!--            <Policies>-->
+<!--                <SizeBasedTriggeringPolicy size="100 MB"/>-->
+<!--            </Policies>-->
+
+<!--            <DefaultRolloverStrategy max="200">-->
+<!--                <Delete basePath="${baseDir}" maxDepth="1">-->
+<!--                    <IfFileName glob="bon_gateway_access_normal.log.*"/>-->
+<!--                    <IfLastModified age="5d"/>-->
+<!--                </Delete>-->
+<!--            </DefaultRolloverStrategy>-->
+<!--        </RollingRandomAccessFile>-->
+
+<!--        <RollingRandomAccessFile name="bon_gateway_server_normal" fileName="logs/bon_gateway_server_normal.log"-->
+<!--                                 filePattern="logs/bon_gateway_server_normal.log.%d.%i" immediateFlush="false">-->
+<!--            <PatternLayout pattern="${Pattern}" charset="UTF-8"/>-->
+
+<!--            <Policies>-->
+<!--                <SizeBasedTriggeringPolicy size="100 MB"/>-->
+<!--            </Policies>-->
+
+<!--            <DefaultRolloverStrategy max="200">-->
+<!--                <Delete basePath="${baseDir}" maxDepth="1">-->
+<!--                    <IfFileName glob="bon_gateway_server_normal.log.*"/>-->
+<!--                    <IfLastModified age="15d"/>-->
+<!--                </Delete>-->
+<!--            </DefaultRolloverStrategy>-->
+<!--        </RollingRandomAccessFile>-->
+
+
+    </Appenders>
+    <Loggers>
+
+<!--        <AsyncLogger name="bon_gateway_data_normal" level="INFO" includeLocation="false" additivity="false">-->
+<!--            <AppenderRef ref="bon_gateway_data_normal"/>-->
+<!--        </AsyncLogger>-->
+
+
+<!--        <AsyncLogger name="bon_gateway_access_normal" level="INFO" includeLocation="false" additivity="false">-->
+<!--            <AppenderRef ref="bon_gateway_access_normal"/>-->
+<!--        </AsyncLogger>-->
+
+
+<!--        <AsyncLogger name="bon_gateway_server_normal" level="INFO" includeLocation="false" additivity="false">-->
+<!--            <AppenderRef ref="bon_gateway_server_normal"/>-->
+<!--        </AsyncLogger>-->
+
+        <AsyncRoot level="INFO" includeLocation="true">
+            <AppenderRef ref="Console"/>
+        </AsyncRoot>
+    </Loggers>
+    <ContextDataInheritanceStrategy>INHERIT_ALWAYS</ContextDataInheritanceStrategy>
+</Configuration>

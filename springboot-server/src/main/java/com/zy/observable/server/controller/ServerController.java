@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zy.observable.server.bean.AjaxResult;
 import com.zy.observable.server.service.TestService;
 import com.zy.observable.server.vo.Student;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 /**
@@ -44,7 +54,7 @@ public class ServerController {
     @GetMapping("/user")
     @ResponseBody
     public String getUser(){
-        logger.info("do getUser");
+        logger.info("do getUser,currentThread:{}",Thread.currentThread().getName());
         return testService.users();
     }
     @GetMapping("/")
@@ -155,8 +165,38 @@ public class ServerController {
         return jsonStr;
     }
 
+    @RequestMapping(value="/toJsonStr",produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String toJsonStr(){
+        return JSONObject.toJSONString(new Student("tom",20));
+    }
+
 
     private String result() {
         return client ? "【已开启】客户端请求" : "【已关闭】客户端请求";
     }
+
+    @RequestMapping("/download")
+    public Object download(HttpServletRequest request, HttpServletResponse response) {
+        logger.info("download file");
+
+        final String fileName = "AI Agent 可观测性探索与实践（终版）.pptx";
+        if (!StringUtils.isEmpty(fileName)) {
+            // 下载
+            final File file = new File("/home/liurui/驻云/aws", fileName);
+            try {
+                response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "utf-8"));
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+            response.setContentType("application/octet-stream");
+            try (final ServletOutputStream outputStream = response.getOutputStream()){
+                Files.copy(Paths.get(file.getPath()), outputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
 }

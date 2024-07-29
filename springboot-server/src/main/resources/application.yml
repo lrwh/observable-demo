@@ -17,9 +17,20 @@ spring:
     active: dev
 extra:
   host: localhost
-client: false
+client: true
 
-#logging:
-#  config: classpath:log4j2.xml
 profiling:
-  file: /opt/profiling/profiling.txt
+  file: /home/liurui/profiling/profiling.txt
+
+#opentracing:
+#  jaeger:
+#    enabled: true
+#    const-sampler:
+#      decision: true
+#    service-name: ${spring.application.name}
+#    udp-sender:
+#      host: localhost
+#      port: 6831
+#      log-spans: true
+#    http-sender:
+#      url: http://localhost:9529/apis/traces
